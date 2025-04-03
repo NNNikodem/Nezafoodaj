@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234759768887",
+    "project_id": "nezafoodaj",
+    "storage_bucket": "nezafoodaj.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234759768887:android:85307e133afd09dd54a8b2",
+        "android_client_info": {
+          "package_name": "com.example.nezafoodaj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaJjAtao_ttFzfptpo0vl7FbXSj0f_mFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

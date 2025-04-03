@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Nezafoodaj</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="homeFragment">Welcome</string>
+    <string name="searchFragment">Here you can search through recipes.</string>
+    <string name="myRecipesFragment">Here you can see your recipes.</string>
+    <string name="profileFragment">Here you can see your profile.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
