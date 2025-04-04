@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple"
-    tools:context=".MyRecipesFragment">
+    tools:context=".ui.myRecipes.MyRecipesFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -13,5 +13,23 @@
         android:text="@string/myRecipesFragment"
         android:gravity="center"
         android:textColor="@color/white"/>
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pridaj Recept"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="100dp"
+        />
+
+    <Button
+        android:id="@+id/btnShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ukaz recepty"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="20dp"
+        />
 
 </FrameLayout>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/green"
     android:padding="24dp"
-    tools:context=".AuthActivity">
+    tools:context=".auth.AuthActivity">
 
     <!-- Nadpis -->
     <TextView

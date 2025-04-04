@@ -1,12 +1,16 @@
-package com.example.nezafoodaj
+package com.example.nezafoodaj.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.nezafoodaj.ui.home.HomeFragment
+import com.example.nezafoodaj.ui.myRecipes.MyRecipesFragment
+import com.example.nezafoodaj.R
+import com.example.nezafoodaj.ui.search.SearchFragment
+import com.example.nezafoodaj.TestFragment
 import com.example.nezafoodaj.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(SearchFragment())
                     true
                 }
-                R.id.nav_profile->
+                R.id.nav_profile ->
                 {
                     replaceFragment(TestFragment())
                     true
