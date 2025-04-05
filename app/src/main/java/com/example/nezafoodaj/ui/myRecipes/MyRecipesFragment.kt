@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nezafoodaj.R
+import com.example.nezafoodaj.adapters.RecipeAdapter
 import com.example.nezafoodaj.data.RecipeRepository
 import com.example.nezafoodaj.models.Ingredient
 import com.example.nezafoodaj.models.Recipe
@@ -18,6 +21,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MyRecipesFragment : Fragment() {
     private val rr = RecipeRepository()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recipeAdapter: RecipeAdapter
+    private val recipeList = mutableListOf<Recipe>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -31,6 +37,9 @@ class MyRecipesFragment : Fragment() {
 
         val btnCreate: Button = view.findViewById(R.id.btnCreate)
         val btnShow: Button = view.findViewById(R.id.btnShow)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewRecipes)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         // Set up button click listener or other logic
         btnCreate.setOnClickListener {
             val userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -66,35 +75,25 @@ class MyRecipesFragment : Fragment() {
             }
         }
         btnShow.setOnClickListener {
-            // Get the current user's ID from FirebaseAuth
             val userId = FirebaseAuth.getInstance().currentUser?.uid
 
             if (userId != null) {
-                // Fetch and show recipes for the logged-in user
                 rr.getAll(userId) { recipes, success ->
-                    if (success) {
-                        // Handle the fetched recipes, e.g., show them in a RecyclerView
-                        recipes?.forEach { recipe ->
-                            Log.d("Recipe", "Recipe Name: ${recipe.name}")
-                            Log.d("Recipe", "User ID: ${recipe.userId}")
+                    if (success && recipes != null) {
+                        recipeList.clear() // Vyčistí staré dáta
+                        recipeList.addAll(recipes) // Pridá nové recepty
 
-                            // Log ingredients
-                            recipe.ingredients.forEach { ingredient ->
-                                Log.d("Recipe", "Ingredient Name: ${ingredient.name}, Amount: ${ingredient.amount}, Unit: ${ingredient.unit}")
-                            }
-
-                            // Log steps
-                            recipe.steps.forEach { step ->
-                                Log.d("Recipe", "Step Text: ${step.text}")
-                            }
+                        if (::recipeAdapter.isInitialized) {
+                            recipeAdapter.notifyDataSetChanged() // Oznámi RecyclerView, že sa dáta zmenili
+                        } else {
+                            recipeAdapter = RecipeAdapter(recipeList) // Vytvorí nový adaptér
+                            recyclerView.adapter = recipeAdapter // Nastaví adaptér do RecyclerView
                         }
                     } else {
-                        // Handle failure
                         Toast.makeText(context, "Failed to fetch recipes", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
-                // Handle the case when the user is not logged in
                 Toast.makeText(context, "Please log in to view your recipes.", Toast.LENGTH_SHORT).show()
             }
         }

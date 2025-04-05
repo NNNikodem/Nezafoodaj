@@ -8,20 +8,32 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/myRecipesFragment"
         android:gravity="center"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="464dp"
+        android:scrollbars="vertical"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="75dp"
+        android:paddingLeft = "10dp"
+        android:paddingRight = "10dp"
+        tools:listitem="@layout/item_recipe" />
 
     <Button
         android:id="@+id/btnCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pridaj Recept"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="100dp"
-        />
+        android:text="Pridaj Recept" />
 
     <Button
         android:id="@+id/btnShow"
