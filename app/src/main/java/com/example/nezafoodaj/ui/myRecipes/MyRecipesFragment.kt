@@ -1,5 +1,6 @@
 package com.example.nezafoodaj.ui.myRecipes
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.adapters.RecipeAdapter
 import com.example.nezafoodaj.data.RecipeRepository
+import com.example.nezafoodaj.main.AddRecipeActivity
+import com.example.nezafoodaj.main.RecipeDetailActivity
 import com.example.nezafoodaj.models.Ingredient
 import com.example.nezafoodaj.models.Recipe
 import com.example.nezafoodaj.models.Step
@@ -24,6 +27,7 @@ class MyRecipesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var recipeAdapter: RecipeAdapter
     private val recipeList = mutableListOf<Recipe>()
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -36,68 +40,53 @@ class MyRecipesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_my_recipes, container, false)
 
         val btnCreate: Button = view.findViewById(R.id.btnCreate)
-        val btnShow: Button = view.findViewById(R.id.btnShow)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewRecipes)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewRecipes)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         // Set up button click listener or other logic
         btnCreate.setOnClickListener {
             val userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
-            // Example Recipe
-            val ingredients = listOf(
-                Ingredient("Flour", 200.0, UnitType.GRAM),
-                Ingredient("Sugar", 100.0, UnitType.GRAM),
-                Ingredient("Eggs", 2.0, UnitType.PIECE)
-            )
-
-            val steps = listOf(
-                Step("Mix all ingredients together.", ""),
-                Step("Bake at 180°C for 20 minutes.", "")
-            )
-
-            val recipe = Recipe(
-                userId = userId,
-                name = "Simple Cake",
-                ingredients = ingredients,
-                steps = steps,
-                finalImage = "" // You can add a URL or path to an image if you have one
-            )
-
-            // Add recipe to Firestore
-            rr.addRecipe(recipe) { success ->
-                if (success) {
-                    // Handle success
-                    Toast.makeText(context, "Recipe added successfully!", Toast.LENGTH_SHORT).show()
-                } else {
-                    // Handle failure
-                    Toast.makeText(context, "Failed to add recipe.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        btnShow.setOnClickListener {
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-
-            if (userId != null) {
-                rr.getAll(userId) { recipes, success ->
-                    if (success && recipes != null) {
-                        recipeList.clear() // Vyčistí staré dáta
-                        recipeList.addAll(recipes) // Pridá nové recepty
-
-                        if (::recipeAdapter.isInitialized) {
-                            recipeAdapter.notifyDataSetChanged() // Oznámi RecyclerView, že sa dáta zmenili
-                        } else {
-                            recipeAdapter = RecipeAdapter(recipeList) // Vytvorí nový adaptér
-                            recyclerView.adapter = recipeAdapter // Nastaví adaptér do RecyclerView
-                        }
-                    } else {
-                        Toast.makeText(context, "Failed to fetch recipes", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(context, "Please log in to view your recipes.", Toast.LENGTH_SHORT).show()
-            }
+            createRecipe()
         }
 
+        if (userId != null) {
+            showRecipes(userId)
+        }
         return view
     }
+    fun createRecipe()
+    {
+        val intent = Intent(requireContext(), AddRecipeActivity::class.java)
+        startActivity(intent)
+    }
+    fun showRecipes(userId: String) {
+        rr.getAll(userId) { recipes, success ->
+            if (success && recipes != null) {
+                recipeList.clear()
+
+                // Sort recipes by dateCreated (assuming dateCreated is a Date or timestamp type)
+                val sortedRecipes = recipes.sortedByDescending { it.dateCreated }
+
+                // Add sorted recipes to the list
+                recipeList.addAll(sortedRecipes)
+
+                val onRecipeClick: (String) -> Unit = { recipeId ->
+                    val intent = Intent(requireContext(), RecipeDetailActivity::class.java)
+                    intent.putExtra("recipeId", recipeId)
+                    startActivity(intent)
+                }
+
+                // Notify the adapter about the change in data
+                if (::recipeAdapter.isInitialized) {
+                    recipeAdapter.notifyDataSetChanged()
+                } else {
+                    recipeAdapter = RecipeAdapter(recipeList, onRecipeClick)
+                    recyclerView.adapter = recipeAdapter
+                }
+            } else {
+                Toast.makeText(context, "Failed to fetch recipes", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }

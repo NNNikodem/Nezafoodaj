@@ -8,13 +8,21 @@ class RecipeRepository {
     private val db = FirebaseFirestore.getInstance().collection("recipes")
 
     fun addRecipe(recipe: Recipe, onComplete: (Boolean) -> Unit) {
-        db.add(recipe)
-            .addOnSuccessListener { documentReference ->
-                onComplete(true)
-            }
-            .addOnFailureListener {
-                onComplete(false)
-            }
+        db.add(recipe).addOnSuccessListener { documentReference ->
+            val recipeWithId = recipe.copy(id = documentReference.id) // skopíruj recept s novým ID
+
+            // Prepíš ho rovno do Firestore pod týmto ID (nahradíme pôvodný dokument)
+            db.document(documentReference.id).set(recipeWithId)
+                .addOnSuccessListener {
+                    onComplete(true)
+                }
+                .addOnFailureListener {
+                    onComplete(false)
+                }
+
+        }.addOnFailureListener {
+            onComplete(false)
+        }
     }
     fun removeRecipe(recipeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         // Get a reference to the document based on the recipe ID
@@ -48,6 +56,20 @@ class RecipeRepository {
             }
             .addOnFailureListener {
                 onComplete(null, false) // Return null and false if query fails
+            }
+    }
+    fun getRecipeById(id: String, onComplete: (Recipe?, Boolean) -> Unit) {
+        db.document(id).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val recipe = document.toObject(Recipe::class.java)
+                    onComplete(recipe, true)
+                } else {
+                    onComplete(null, false)
+                }
+            }
+            .addOnFailureListener {
+                onComplete(null, false)
             }
     }
 }

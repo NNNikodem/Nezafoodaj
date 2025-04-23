@@ -11,14 +11,25 @@ import com.example.nezafoodaj.models.Recipe
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.data.RecipeRepository
 
-class RecipeAdapter(private val recipes: MutableList<Recipe>) :
-    RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
-    private val rr:RecipeRepository = RecipeRepository()
-    class RecipeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class RecipeAdapter(
+    private val recipes: MutableList<Recipe>,
+    private val onRecipeClick: (String) -> Unit // tu pridáme callback na kliknutie
+) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
+
+    private val rr: RecipeRepository = RecipeRepository()
+
+    inner class RecipeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val recipeName: TextView = view.findViewById(R.id.textViewRecipeName)
         val ingredients: TextView = view.findViewById(R.id.textViewIngredients)
         val stepsCount: TextView = view.findViewById(R.id.textViewStepsCount)
         val btnDelete: Button = view.findViewById(R.id.btnDelete)
+
+        init {
+            view.setOnClickListener {
+                val recipe = recipes[adapterPosition]
+                onRecipeClick(recipe.getId()) // spustíme callback s ID
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
@@ -30,27 +41,19 @@ class RecipeAdapter(private val recipes: MutableList<Recipe>) :
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val recipe = recipes[position]
         holder.recipeName.text = recipe.name
-        holder.ingredients.text = "Number of ingredients: " + recipe.ingredients.size.toString()
-        holder.stepsCount.text = "Number of steps: " + recipe.steps.size.toString()
+        holder.ingredients.text = "Počet ingrediencií: ${recipe.ingredients.size}"
+        holder.stepsCount.text = "Počet krokov: ${recipe.steps.size}"
+
         holder.btnDelete.setOnClickListener {
             rr.removeRecipe(recipe.getId(), {
-                Log.d("Recipe", "removing recipe at: " + position +"/"+ recipes.size)
-
-                // Success - Remove the recipe from the local list and notify adapter
                 recipes.removeAt(position)
                 notifyItemRemoved(position)
-                Log.d("Recipe", "Left: " + recipes.size)
-                // After removing the item, shift the positions of the remaining items.
-                // Notify the range to update all items after the removed item.
                 notifyItemRangeChanged(position, recipes.size)
             }, { exception ->
-                // Failure - Show error message or handle failure
                 Log.e("RecipeAdapter", "Error deleting recipe", exception)
             })
         }
     }
 
-    override fun getItemCount(): Int {
-        return recipes.size
-    }
+    override fun getItemCount(): Int = recipes.size
 }

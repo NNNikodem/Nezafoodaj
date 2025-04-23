@@ -1,10 +1,16 @@
 package com.example.nezafoodaj
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+import com.example.nezafoodaj.auth.AuthActivity
+import com.example.nezafoodaj.main.MainActivity
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +40,21 @@ class TestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_test, container, false)
+        val view =  inflater.inflate(R.layout.fragment_test, container, false)
+
+        view.findViewById<Button>(R.id.btnLogout).setOnClickListener {
+            // Odhlásenie používateľa z Firebase
+            FirebaseAuth.getInstance().signOut()
+
+            // Spustenie AuthActivity a vyčistenie back stacku
+            val intent = Intent(requireContext(), AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            Toast.makeText(requireContext(), "Odhlásený", Toast.LENGTH_SHORT).show()
+            startActivity(intent)
+        }
+        return view
+
+
     }
 
     companion object {

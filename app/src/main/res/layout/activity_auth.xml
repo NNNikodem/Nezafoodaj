@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Email Label -->
+    <!-- Email -->
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
@@ -32,10 +32,6 @@
         app:layout_constraintBottom_toTopOf="@+id/et_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Email Input -->
-
-    <!-- Password Label -->
 
     <EditText
         android:id="@+id/et_email"
@@ -50,7 +46,32 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Meno:"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        />
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/input_background"
+        android:hint="Zadaj meno"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
+    <!-- Password -->
     <TextView
         android:id="@+id/tvPassword"
         android:layout_width="wrap_content"
@@ -58,19 +79,14 @@
         android:text="Heslo:"
         android:textSize="18sp"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/et_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Password Input -->
-
-    <!-- Prihlásiť sa Button -->
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
         android:background="@drawable/input_background"
         android:hint="Zadaj heslo"
         android:inputType="textPassword"
@@ -78,7 +94,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_email" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
+
+    <!-- Password repeat -->
+    <TextView
+        android:id="@+id/tvPasswordRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Over heslo:"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/et_passwordRepeat"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/input_background"
+        android:hint="Zopakuj heslo"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPasswordRepeat" />
 
     <Button
         android:id="@+id/btnAuth"

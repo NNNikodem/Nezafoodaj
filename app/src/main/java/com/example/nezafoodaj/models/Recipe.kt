@@ -1,5 +1,9 @@
 package com.example.nezafoodaj.models
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 // Recept
 data class Recipe(
     private var id: String = "",
@@ -7,7 +11,10 @@ data class Recipe(
     val name: String = "",
     val ingredients: List<Ingredient> = listOf(),
     val steps: List<Step> = listOf(),
-    val finalImage: String = ""
+    val finalImage: String = "",
+    val dateCreated: Long = System.currentTimeMillis(),
+    val rating: Double = 0.0,
+    val timesRated: Int = 0
 ) {
     // Custom setter method for setting the id, if needed
     fun setId(documentId: String) {
@@ -16,6 +23,12 @@ data class Recipe(
     fun getId(): String
     {
         return this.id
+    }
+
+    fun formatTimestamp(timestamp: Long): String {
+        val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+        val date = Date(timestamp)
+        return sdf.format(date)
     }
 }
 
@@ -33,14 +46,18 @@ data class Step(
 )
 
 // Enum pre jednotky
-enum class UnitType {
-    GRAM, // g
-    KILOGRAM, // kg
-    MILLILITER, // ml
-    LITER, // l
-    CUP, // hrnček
-    TABLESPOON, // PL
-    TEASPOON, // KL
-    PIECE, // kus
-    NONE // ak nie je jednotka potrebná (napr. "štipka soli")
+enum class UnitType(val shortName: String) {
+    GRAM("g"),
+    KILOGRAM("kg"),
+    MILLILITER("ml"),
+    LITER("l"),
+    CUP("hrnček"),
+    TABLESPOON("PL"),
+    TEASPOON("KL"),
+    PIECE("ks"),
+    NONE("");
+
+    override fun toString(): String {
+        return shortName
+    }
 }
