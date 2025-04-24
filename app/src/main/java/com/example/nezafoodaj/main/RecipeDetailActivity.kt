@@ -27,6 +27,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var textViewName: TextView
     private lateinit var imageViewFinal: ImageView
     private lateinit var textViewDate: TextView
+    private lateinit var textViewDescription: TextView
     private lateinit var layoutIngredients: LinearLayout
     private lateinit var layoutSteps: LinearLayout
     private lateinit var btnBack: ImageButton
@@ -42,6 +43,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         textViewName = findViewById(R.id.textViewRecipeName)
         imageViewFinal = findViewById(R.id.imageViewFinal)
         textViewDate = findViewById(R.id.textViewDate)
+        textViewDescription = findViewById(R.id.textViewDescription)
         layoutIngredients = findViewById(R.id.layoutIngredients)
         layoutSteps = findViewById(R.id.layoutSteps)
         btnBack = findViewById(R.id.btnBack)
@@ -72,7 +74,7 @@ class RecipeDetailActivity : AppCompatActivity() {
             Glide.with(this).load(recipe.finalImage).into(imageViewFinal)
         }
         textViewDate.text = recipe.formatTimestamp(recipe.dateCreated)
-
+        textViewDescription.text = recipe.description
         // Clear the existing views
         layoutIngredients.removeAllViews()
         layoutSteps.removeAllViews()
@@ -84,9 +86,9 @@ class RecipeDetailActivity : AppCompatActivity() {
                 UnitType.KILOGRAM -> "kg"
                 UnitType.MILLILITER -> "ml"
                 UnitType.LITER -> "l"
-                UnitType.CUP -> "hrnček"
+                UnitType.CUP -> "hrnček/y"
                 UnitType.TABLESPOON -> "PL"
-                UnitType.TEASPOON -> "KL"
+                UnitType.TEASPOON -> "ČL"
                 UnitType.PIECE -> "ks"
                 UnitType.NONE -> ""
             }

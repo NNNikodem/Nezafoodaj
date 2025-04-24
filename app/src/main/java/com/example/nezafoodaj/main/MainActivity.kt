@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.example.nezafoodaj.ProfileFragment
 import com.example.nezafoodaj.ui.home.HomeFragment
 import com.example.nezafoodaj.ui.myRecipes.MyRecipesFragment
 import com.example.nezafoodaj.R
-import com.example.nezafoodaj.ui.search.SearchFragment
-import com.example.nezafoodaj.TestFragment
 import com.example.nezafoodaj.databinding.ActivityMainBinding
+import com.example.nezafoodaj.ui.search.SearchFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_profile ->
                 {
-                    replaceFragment(TestFragment())
+                    replaceFragment(ProfileFragment())
                     true
                 }
                 else -> false

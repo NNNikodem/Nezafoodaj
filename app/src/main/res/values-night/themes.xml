@@ -2,6 +2,13 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Nezafoodaj" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/dark_moss_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/salmon_pink</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurface">@color/dark_moss_green</item> <!-- Toolbars -->
+        <item name="colorOnSurface">@color/straw</item>
+
+
     </style>
 </resources>

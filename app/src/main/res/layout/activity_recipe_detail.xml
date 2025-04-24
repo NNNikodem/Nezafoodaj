@@ -3,12 +3,15 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
     android:padding="16dp">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
 
         <!-- Back button -->
         <ImageButton
@@ -16,8 +19,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
-            android:background="@android:color/transparent"
-            android:src="@android:drawable/ic_media_previous"
+            android:background="@color/salmon_pink"
+            android:src="@drawable/baseline_arrow_back_24"
             android:contentDescription="Back" />
 
         <!-- Recipe name -->
@@ -25,7 +28,7 @@
             android:id="@+id/textViewRecipeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recipe Name"
+            android:text="@string/detail_recipeName"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
@@ -39,19 +42,28 @@
             android:contentDescription="Final Image"
             android:layout_marginBottom="16dp" />
 
+        <!-- Description -->
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[DESCRIPTION]"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
+
         <!-- Date Created -->
         <TextView
             android:id="@+id/textViewDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date Created:"
+            android:text="[Date Created]"
             android:textStyle="bold"
             />
         <!-- Ingredients title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ingredients:"
+            android:text="@string/detail_Ingredients"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginBottom="8dp" />
@@ -68,7 +80,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Steps:"
+            android:text="@string/detail_Steps"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginBottom="8dp" />

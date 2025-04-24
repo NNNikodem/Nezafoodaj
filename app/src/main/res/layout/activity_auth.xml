@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green"
+    android:background="@color/dark_moss_green"
     android:padding="24dp"
-    tools:context=".auth.AuthActivity">
+    tools:context=".auth.AuthActivity"
+    android:orientation="vertical">
 
     <!-- Nadpis -->
     <TextView
@@ -121,35 +122,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPasswordRepeat" />
 
+    <!-- Switch Auth Mode (Register/Login) -->
+
+    <!-- Guideline (lepšie prispôsobenie na rôznych obrazovkách) -->
     <Button
         android:id="@+id/btnAuth"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="12dp"
         android:backgroundTint="@color/white"
         android:text="Prihlásiť sa"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvSwitchAuth"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Switch Auth Mode (Register/Login) -->
     <TextView
         android:id="@+id/tvSwitchAuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:text="Nemáš účet? Zaregistruj sa."
-        android:textColor="@color/white"
+        android:textColor="@color/straw"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Guideline (lepšie prispôsobenie na rôznych obrazovkách) -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

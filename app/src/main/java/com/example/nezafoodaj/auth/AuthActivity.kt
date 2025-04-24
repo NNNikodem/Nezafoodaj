@@ -1,7 +1,9 @@
 package com.example.nezafoodaj.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -14,12 +16,17 @@ import com.google.firebase.auth.FirebaseAuth
 
 class AuthActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthBinding
-    private val auth = FirebaseAuth.getInstance()
-    private val userRepo = UserRepository()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val userRepo:UserRepository = UserRepository()
     private var isLogin = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //If user already signed in
+        if(isSignedIn()){
+            goToMainActivity()
+        }
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -52,12 +59,22 @@ class AuthActivity : AppCompatActivity() {
 
         updateUI()
     }
-
     private fun loginUser(email: String, password: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    goToMainActivity()
+                    userRepo.getCurrentUserData(
+                        onComplete = { user, success ->
+                            Log.d("Auth_Activity", "Prihlásený používateľ: $user")
+                            if (success && user != null) {
+
+                                saveUserDataLocally(user)
+                                goToMainActivity()
+                            } else {
+                                Toast.makeText(this, "Nepodarilo sa načítať údaje používateľa", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
                 } else {
                     Toast.makeText(this, "Prihlásenie zlyhalo: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -65,11 +82,13 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun registerUser(email: String,name: String, password: String) {
-        val user = User(name, email)
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    val user = User(name, email, auth.currentUser?.uid ?: "")
+                    saveUserDataLocally(user)
                     userRepo.addUser(user)
+                    loginUser(email, password)
                     Toast.makeText(this, "Registrácia úspešná", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Chyba pri registrácii: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -135,5 +154,17 @@ class AuthActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+    private fun isSignedIn(): Boolean {
+        return auth.currentUser != null
+    }
+    private fun saveUserDataLocally(user: User) {
+        val prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        with(prefs.edit()) {
+            putString("userName", user.name)
+            putString("userEmail", user.email)
+            putString("userId", user.id)
+            apply()
+        }
     }
 }

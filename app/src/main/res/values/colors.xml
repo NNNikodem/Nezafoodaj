@@ -4,7 +4,15 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#56188f</color>
     <color name="orange">#8f490b</color>
-    <color name="green">#154211</color>
+
+    <color name="darkgreen">#379683</color>
+    <color name="lightgreen">#A8E6CF</color>
+    <color name="creme">#FFF3E4</color>
+    <color name="dark_moss_green">#345511</color>
+    <color name="salmon_pink">#FFA3A5</color>
+    <color name="tea_green">#DAFEB7</color>
+    <color name="straw">#DED856</color>
+
     <color name="red">#870c09</color>
 
 </resources>

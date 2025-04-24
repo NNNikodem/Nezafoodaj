@@ -29,7 +29,7 @@ class AddRecipeActivity : AppCompatActivity() {
     private lateinit var btnAddStep: Button
     private lateinit var btnSave: Button
 
-    private val unitTypes = UnitType.values().map { it.name }
+    private val unitTypes = UnitType.entries.map { it.name }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +78,8 @@ class AddRecipeActivity : AppCompatActivity() {
         val ingredients = mutableListOf<Ingredient>()
         val steps = mutableListOf<Step>()
         val recipeName = findViewById<EditText>(R.id.inputRecipeName).text.toString()
+        val description = findViewById<EditText>(R.id.inputRecipeDescription).text.toString()
+
         for (i in 0 until ingredientsContainer.childCount) {
             val row = ingredientsContainer.getChildAt(i)
             val amount = row.findViewById<EditText>(R.id.editAmount).text.toString().toDoubleOrNull() ?: 0.0
@@ -106,6 +108,7 @@ class AddRecipeActivity : AppCompatActivity() {
         val recipe = Recipe(
             userId = userId,
             name = recipeName,
+            description = description,
             ingredients = ingredients,
             steps = steps,
             finalImage = finalImage,

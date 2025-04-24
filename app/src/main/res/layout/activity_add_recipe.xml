@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Recipe Name"
+                android:text="@string/add_recipeName"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -33,7 +33,24 @@
                 android:id="@+id/inputRecipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Zadaj názov receptu"
+                android:hint="@string/add_recipeName_hint"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="16dp"
+                />
+
+            <!-- Description Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/add_description"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+            <EditText
+                android:id="@+id/inputRecipeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_description_hint"
                 android:inputType="textPersonName"
                 android:layout_marginBottom="16dp"
                 />
@@ -41,7 +58,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ingredients"
+                android:text="@string/add_Ingredients"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
@@ -56,14 +73,14 @@
                 android:id="@+id/btnAddIngredient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Ingredient"
+                android:text="@string/add_Ingredients_btn"
                 android:layout_marginTop="8dp" />
 
             <!-- Steps Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Steps"
+                android:text="@string/add_Steps"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
@@ -79,14 +96,14 @@
                 android:id="@+id/btnAddStep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Step"
+                android:text="@string/add_Steps_btn"
                 android:layout_marginTop="8dp" />
 
             <!-- Final Image -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Final Image URL (optional)"
+                android:text="@string/add_finalImage"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
@@ -96,7 +113,7 @@
                 android:id="@+id/editFinalImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="https://example.com/image.jpg"
+                android:hint="@string/add_finalImage_hint"
                 android:inputType="textUri" />
 
             <!-- Save Button -->
@@ -104,7 +121,7 @@
                 android:id="@+id/btnSaveRecipe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Recipe"
+                android:text="@string/add_saveRecipe"
                 android:layout_marginTop="24dp" />
         </LinearLayout>
     </ScrollView>

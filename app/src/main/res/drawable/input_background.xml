@@ -4,6 +4,6 @@
 
     <solid android:color="@color/white"/>  <!-- Farba pozadia -->
     <corners android:radius="12dp"/>       <!-- Zaoblené rohy -->
-    <stroke android:width="2dp" android:color="@color/green"/> <!-- Okraj -->
+    <stroke android:width="2dp" android:color="@color/dark_moss_green"/> <!-- Okraj -->
     <padding android:left="12dp" android:right="12dp"/> <!-- Padding -->
 </shape>

@@ -5,6 +5,30 @@
     <string name="searchFragment">Here you can search through recipes.</string>
     <string name="myRecipesFragment">Here you can see your recipes.</string>
     <string name="profileFragment">Here you can see your profile.</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--  DETAIL RECIPE ACTIVITY -->
+    <string name="detail_recipeName">[RECIPE NAME]</string>
+    <string name="detail_Ingredients">Ingrediencie</string>
+    <string name="detail_Steps">Kroky</string>
+
+    <!-- ADD RECIPE ACTIVITY -->
+    <string name="add_recipeName">Názov receptu</string>
+    <string name="add_recipeName_hint">Zadaj názov receptu</string>
+    <string name="add_description">Popis receptu</string>
+    <string name="add_description_hint">Zadaj popis receptu</string>
+    <string name="add_Ingredients">Ingrediencie</string>
+    <string name="add_Ingredients_btn">Pridať ingredienciu</string>
+    <string name="add_Steps">Kroky</string>
+    <string name="add_Steps_btn">Pridať krok</string>
+    <string name="add_finalImage">Výsledný obrázok</string>
+    <string name="add_finalImage_hint">https://example.com/image.jpg</string>
+    <string name="add_saveRecipe">Uložiť</string>
+
+    <!-- MENU -->
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_myRecipes">My Recipes</string>
+    <string name="nav_profile">Profile</string>
+
 </resources>

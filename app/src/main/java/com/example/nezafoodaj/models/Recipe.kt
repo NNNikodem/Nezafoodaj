@@ -9,6 +9,7 @@ data class Recipe(
     private var id: String = "",
     val userId: String = "",
     val name: String = "",
+    val description: String = "",
     val ingredients: List<Ingredient> = listOf(),
     val steps: List<Step> = listOf(),
     val finalImage: String = "",
