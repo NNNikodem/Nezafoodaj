@@ -1,16 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/searchFragmentRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment">
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Vyhľadávací Input -->
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hľadať recept podľa názvu"
+        android:inputType="text"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        android:drawablePadding="8dp"
+        android:padding="12dp"
+        android:background="@drawable/search_edittext_background"
+        android:elevation="4dp"
+        android:textSize="16sp" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/searchFragment"
-        android:gravity="center"
-        android:textColor="@color/white"/>
+        android:layout_below="@id/etSearch"
+        android:paddingTop="12dp"
+        android:visibility="gone"/>
 
-</FrameLayout>
+    <!-- TextView keď nič nenájdeme -->
+    <TextView
+        android:id="@+id/tvNoResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nenašli sa žiadne recepty."
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textColor="#808080"/>
+
+    <!-- Loading indikátor -->
+    <ProgressBar
+        android:id="@+id/progressBarLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

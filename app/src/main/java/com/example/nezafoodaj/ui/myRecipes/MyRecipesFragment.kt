@@ -45,7 +45,6 @@ class MyRecipesFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         // Set up button click listener or other logic
         btnCreate.setOnClickListener {
-            val userId: String = FirebaseAuth.getInstance().currentUser?.uid.toString()
             createRecipe()
         }
 
@@ -60,7 +59,7 @@ class MyRecipesFragment : Fragment() {
         startActivity(intent)
     }
     fun showRecipes(userId: String) {
-        rr.getAll(userId) { recipes, success ->
+        rr.getAllByUserId(userId) { recipes, success ->
             if (success && recipes != null) {
                 recipeList.clear()
 

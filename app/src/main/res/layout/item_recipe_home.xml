@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF"
+    android:layout_gravity="center_vertical">
+
+    <!-- Celý obsah karty -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center">
+
+        <!-- Obrázok receptu -->
+        <ImageView
+            android:id="@+id/ivRecipeImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Názov receptu -->
+        <TextView
+            android:id="@+id/tvRecipeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recept"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="#000000"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- Hodnotenie receptu -->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4.5"
+            android:isIndicator="true"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -81,18 +81,7 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         // Add ingredients dynamically using the ingredient_item layout
         for (ingredient in recipe.ingredients) {
-            val unitShort = when (ingredient.unit) {
-                UnitType.GRAM -> "g"
-                UnitType.KILOGRAM -> "kg"
-                UnitType.MILLILITER -> "ml"
-                UnitType.LITER -> "l"
-                UnitType.CUP -> "hrnček/y"
-                UnitType.TABLESPOON -> "PL"
-                UnitType.TEASPOON -> "ČL"
-                UnitType.PIECE -> "ks"
-                UnitType.NONE -> ""
-            }
-
+            val unitShort = ingredient.unit.toString()
             val ingredientView = layoutInflater.inflate(R.layout.item_ingredient, layoutIngredients, false)
             val ingredientName = ingredientView.findViewById<TextView>(R.id.ingredientName)
             val ingredientAmount = ingredientView.findViewById<TextView>(R.id.ingredientAmount)

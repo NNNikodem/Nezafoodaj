@@ -25,6 +25,7 @@
         android:background="@color/dark_moss_green"
         app:itemTextColor="@color/bottom_nav_item_color"
         app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

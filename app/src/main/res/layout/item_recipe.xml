@@ -42,17 +42,6 @@
 
         </LinearLayout>
 
-        <!-- Floating Button -->
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:layout_marginRight="20dp"
-            android:backgroundTint="@color/red"
-            android:text="X"
-            android:textSize="20sp" />
-
 
     </FrameLayout>
 </androidx.cardview.widget.CardView>

@@ -40,7 +40,7 @@ class RecipeRepository {
             }
     }
 
-    fun getAll(userId: String, onComplete: (List<Recipe>?, Boolean) -> Unit) {
+    fun getAllByUserId(userId: String, onComplete: (List<Recipe>?, Boolean) -> Unit) {
         db.whereEqualTo("userId", userId) // Query to filter recipes by userId
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -56,6 +56,23 @@ class RecipeRepository {
             }
             .addOnFailureListener {
                 onComplete(null, false) // Return null and false if query fails
+            }
+    }
+    fun getAll(onComplete: (List<Recipe>?, Boolean) -> Unit) {
+        db.get()
+            .addOnSuccessListener { querySnapshot ->
+                val recipes = mutableListOf<Recipe>()
+                for (document in querySnapshot.documents) {
+                    val recipe = document.toObject(Recipe::class.java)
+                    if (recipe != null) {
+                        recipe.setId(document.id)
+                        recipes.add(recipe)
+                    }
+                }
+                onComplete(recipes, true)
+            }
+            .addOnFailureListener {
+                onComplete(null, false)
             }
     }
     fun getRecipeById(id: String, onComplete: (Recipe?, Boolean) -> Unit) {

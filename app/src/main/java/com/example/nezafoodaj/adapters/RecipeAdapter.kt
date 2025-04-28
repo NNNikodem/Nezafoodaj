@@ -22,7 +22,6 @@ class RecipeAdapter(
         val recipeName: TextView = view.findViewById(R.id.textViewRecipeName)
         val ingredients: TextView = view.findViewById(R.id.textViewIngredients)
         val stepsCount: TextView = view.findViewById(R.id.textViewStepsCount)
-        val btnDelete: Button = view.findViewById(R.id.btnDelete)
 
         init {
             view.setOnClickListener {
@@ -43,17 +42,12 @@ class RecipeAdapter(
         holder.recipeName.text = recipe.name
         holder.ingredients.text = "Počet ingrediencií: ${recipe.ingredients.size}"
         holder.stepsCount.text = "Počet krokov: ${recipe.steps.size}"
-
-        holder.btnDelete.setOnClickListener {
-            rr.removeRecipe(recipe.getId(), {
-                recipes.removeAt(position)
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position, recipes.size)
-            }, { exception ->
-                Log.e("RecipeAdapter", "Error deleting recipe", exception)
-            })
-        }
     }
 
     override fun getItemCount(): Int = recipes.size
+    fun updateRecipes(newRecipes: List<Recipe>) {
+        recipes.clear()
+        recipes.addAll(newRecipes)
+        notifyDataSetChanged()
+    }
 }
