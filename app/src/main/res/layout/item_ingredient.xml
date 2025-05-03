@@ -7,7 +7,6 @@
     android:layout_marginTop="8dp"
     android:background="?android:attr/selectableItemBackground">
 
-    <!-- Názov ingrediencie -->
     <TextView
         android:id="@+id/ingredientName"
         android:layout_width="0dp"
@@ -16,7 +15,6 @@
         android:text="Ingrediencia"
         android:textSize="16sp" />
 
-    <!-- Množstvo -->
     <TextView
         android:id="@+id/ingredientAmount"
         android:layout_width="wrap_content"
@@ -25,11 +23,11 @@
         android:textSize="16sp"
         android:layout_marginEnd="8dp" />
 
-    <!-- Jednotka -->
     <TextView
         android:id="@+id/ingredientUnit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="g"
         android:textSize="16sp" />
+
 </LinearLayout>

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.nezafoodaj.models.Recipe
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.data.RecipeRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RecipeAdapterHome(
 private var recipes: List<Recipe>,  // Užívame immutable List na zaistenie integrity dát
@@ -48,20 +49,32 @@ private val onRecipeClick: (String) -> Unit // Callback pre kliknutie
 
         // Funkcia na binding dát
         fun bind(recipe: Recipe) {
-            // Zobrazenie obrázku pomocou Glide (alebo iného image loadera)
             Glide.with(itemView.context)
-                .load(recipe.finalImage)  // Predpokladáme, že finalImage je URL alebo cesta k obrázku
+                .load(recipe.finalImage)
                 .into(ivRecipeImage)
 
-            // Zobrazenie názvu receptu
             tvRecipeName.text = recipe.name
+            ratingBar.rating = 0f
 
-            // Zobrazenie hodnotenia
-            ratingBar.rating = recipe.rating.toFloat()  // Rating musí byť Float pre RatingBar
+            // Načítanie hodnotenia
+            val ratingsDb = FirebaseFirestore.getInstance().collection("ratings")
+            ratingsDb.whereEqualTo("recipeId", recipe.getId())
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    val ratings = querySnapshot.documents.mapNotNull { it.getDouble("rating") }
+                    if (ratings.isNotEmpty()) {
+                        val avgRating = ratings.average().toFloat()
+                        ratingBar.rating = avgRating
+                    } else {
+                        ratingBar.rating = 0f
+                    }
+                }
+                .addOnFailureListener {
+                    ratingBar.rating = 0f
+                }
 
-            // Ak chceš nastaviť event pre kliknutie na položku
             itemView.setOnClickListener {
-                onRecipeClick(recipe.getId())  // Zavoláme callback s ID receptu
+                onRecipeClick(recipe.getId())
             }
         }
     }

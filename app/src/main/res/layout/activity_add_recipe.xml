@@ -9,10 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:title="Add Recipe"
+        android:title="@string/activityName_AddRecipe"
         android:titleTextColor="@android:color/white" />
+    <ProgressBar
+        android:id="@+id/progressBarUpload"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="5dp"
+        android:visibility="gone"
+        android:progressTint="@color/straw"
+        android:max="100" />
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,6 +43,7 @@
                 android:id="@+id/inputRecipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/addrecipe_inputfield_background"
                 android:hint="@string/add_recipeName_hint"
                 android:inputType="textPersonName"
                 android:layout_marginBottom="16dp"
@@ -50,54 +61,91 @@
                 android:id="@+id/inputRecipeDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/addrecipe_inputfield_background"
                 android:hint="@string/add_description_hint"
                 android:inputType="textPersonName"
                 android:layout_marginBottom="16dp"
                 />
+            <!-- PrepTime Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/add_prepTime"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                >
+                <EditText
+                    android:id="@+id/inputRecipePrepTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/addrecipe_inputfield_background"
+                    android:hint="@string/add_prepTime_hint"
+                    android:inputType="number"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_prepTime_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    />
+            </LinearLayout>
+
+
             <!-- Ingredients Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_Ingredients"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp"/>
-
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/btnAddIngredient"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/add" />
             <LinearLayout
                 android:id="@+id/ingredientsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
-            <Button
-                android:id="@+id/btnAddIngredient"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_Ingredients_btn"
-                android:layout_marginTop="8dp" />
 
-            <!-- Steps Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_Steps"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="8dp" />
 
-            <LinearLayout
-                android:id="@+id/stepsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                <!-- Steps Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_Steps"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="24dp"
+                    />
+                <Button
+                    android:id="@+id/btnAddStep"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="@string/add"
+                    android:tooltipText="@string/add_Steps_btn"
+                    />
 
-            <Button
-                android:id="@+id/btnAddStep"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_Steps_btn"
-                android:layout_marginTop="8dp" />
+                <LinearLayout
+                    android:id="@+id/stepsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
+
+
 
             <!-- Final Image -->
             <TextView
@@ -109,12 +157,21 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="4dp"/>
 
-            <EditText
-                android:id="@+id/editFinalImage"
+            <ImageView
+                android:id="@+id/imageFinal"
                 android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="8dp"
+                android:background="#CCC"
+                android:contentDescription="@string/add_finalImage_imageContentDescription"
+                />
+
+            <Button
+                android:id="@+id/btnSelectImage"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_finalImage_hint"
-                android:inputType="textUri" />
+                android:text="@string/add_finalImage_btn"/>
 
             <!-- Save Button -->
             <Button

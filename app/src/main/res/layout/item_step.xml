@@ -7,7 +7,6 @@
     android:layout_marginTop="8dp"
     android:background="?android:attr/selectableItemBackground">
 
-    <!-- Popis kroku -->
     <TextView
         android:id="@+id/stepDescription"
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         android:textSize="16sp"
         android:layout_marginBottom="8dp" />
 
-    <!-- Obrázok kroku (ak existuje) -->
     <ImageView
         android:id="@+id/stepImage"
         android:layout_width="match_parent"

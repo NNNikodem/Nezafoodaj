@@ -3,13 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+    android:padding="5dp"
+    android:background="@drawable/ingredient_background"
+    >
 
     <EditText
         android:id="@+id/editAmount"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:hint="Qty"
+        android:background="@drawable/addrecipe_inputfield_background"
+        android:hint="0"
         android:inputType="numberDecimal"
         android:layout_weight="0"/>
 
@@ -24,6 +28,16 @@
         android:id="@+id/editName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/addrecipe_inputfield_background"
         android:layout_weight="1"
         android:hint="Ingrediencia" />
+    <Button
+        android:id="@+id/btnRemoveIngredient"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="@string/remove"
+        android:backgroundTint="@color/red"
+        android:layout_marginStart="8dp"
+        />
 </LinearLayout>

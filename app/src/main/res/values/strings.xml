@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Nezafoodaj</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="activityName_AddRecipe">Tvorba Receptu</string>
+    <string name="activityName_RecipeDetail">Recept</string>
+
+    <string name="add">+</string>
+    <string name="remove">-</string>
+
     <string name="homeFragment">Welcome</string>
     <string name="searchFragment">Here you can search through recipes.</string>
     <string name="myRecipesFragment">Here you can see your recipes.</string>
@@ -10,25 +15,43 @@
     <!--  DETAIL RECIPE ACTIVITY -->
     <string name="detail_recipeName">[RECIPE NAME]</string>
     <string name="detail_Ingredients">Ingrediencie</string>
-    <string name="detail_Steps">Kroky</string>
+    <string name="detail_Steps">Postup</string>
+    <string name="detail_rateBtn_text">Hodnotiť</string>
 
     <!-- ADD RECIPE ACTIVITY -->
     <string name="add_recipeName">Názov receptu</string>
     <string name="add_recipeName_hint">Zadaj názov receptu</string>
+
     <string name="add_description">Popis receptu</string>
     <string name="add_description_hint">Zadaj popis receptu</string>
+
+    <string name="add_prepTime">Čas prípravy</string>
+    <string name="add_prepTime_hint">0</string>
+    <string name="add_prepTime_text">minút</string>
+
     <string name="add_Ingredients">Ingrediencie</string>
     <string name="add_Ingredients_btn">Pridať ingredienciu</string>
-    <string name="add_Steps">Kroky</string>
+
+    <string name="add_Steps">Postup</string>
     <string name="add_Steps_btn">Pridať krok</string>
+    <string name="add_step_description_hint">Zadaj popis kroku</string>
+    <string name="add_step_imageBtn">Vybrať obrázok kroku</string>
+
+    <string name="add_step_imageContentDescription">Náhľad Obrázka Kroku</string>
+    <string name="upload_stepImage_checkmark">Úspešne uploadnuté</string>
+
     <string name="add_finalImage">Výsledný obrázok</string>
-    <string name="add_finalImage_hint">https://example.com/image.jpg</string>
+    <string name="add_finalImage_btn">Vybrať obrázok</string>
+    <string name="add_finalImage_imageContentDescription">Náhľad vysledného obrázka</string>
+
     <string name="add_saveRecipe">Uložiť</string>
 
+    <string name="add_REMOVERECIPE">Odstrániť recept</string>
+
     <!-- MENU -->
-    <string name="nav_home">Home</string>
-    <string name="nav_search">Search</string>
-    <string name="nav_myRecipes">My Recipes</string>
-    <string name="nav_profile">Profile</string>
+    <string name="nav_home">Domov</string>
+    <string name="nav_search">Hľadať</string>
+    <string name="nav_myRecipes">Moje Recepty</string>
+    <string name="nav_profile">Profil</string>
 
 </resources>

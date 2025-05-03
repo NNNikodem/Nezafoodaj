@@ -23,7 +23,6 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //If user already signed in
         if(isSignedIn()){
             goToMainActivity()
         }
@@ -65,9 +64,7 @@ class AuthActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     userRepo.getCurrentUserData(
                         onComplete = { user, success ->
-                            Log.d("Auth_Activity", "Prihlásený používateľ: $user")
                             if (success && user != null) {
-
                                 saveUserDataLocally(user)
                                 goToMainActivity()
                             } else {
@@ -85,8 +82,7 @@ class AuthActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = User(name, email, auth.currentUser?.uid ?: "")
-                    saveUserDataLocally(user)
+                    val user = User(name, email, auth.currentUser?.uid ?: "", true)
                     userRepo.addUser(user)
                     loginUser(email, password)
                     Toast.makeText(this, "Registrácia úspešná", Toast.LENGTH_SHORT).show()
@@ -160,10 +156,12 @@ class AuthActivity : AppCompatActivity() {
     }
     private fun saveUserDataLocally(user: User) {
         val prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        Log.d("Auth_Activity", "Saving user data: $user")
         with(prefs.edit()) {
             putString("userName", user.name)
             putString("userEmail", user.email)
             putString("userId", user.id)
+            putBoolean("admin", user.admin)
             apply()
         }
     }

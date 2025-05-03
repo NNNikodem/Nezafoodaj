@@ -12,10 +12,10 @@ data class Recipe(
     val description: String = "",
     val ingredients: List<Ingredient> = listOf(),
     val steps: List<Step> = listOf(),
+    val prepTime: Int = 0,
     val finalImage: String = "",
     val dateCreated: Long = System.currentTimeMillis(),
-    val rating: Double = 0.0,
-    val timesRated: Int = 0
+    val rating: Double = 0.0
 ) {
     // Custom setter method for setting the id, if needed
     fun setId(documentId: String) {
