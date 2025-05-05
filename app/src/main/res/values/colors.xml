@@ -20,10 +20,14 @@
 
     <color name="component_background">@color/input_background</color>
     <color name="component_border">@color/input_border</color>
+    <color name="header_color">@color/dark_moss_green</color>
     <color name="text_color">#FF000000</color>
     <color name="button_color">@color/dark_moss_green</color>
     <color name="input_background">#F0F0F0</color>
     <color name="input_border">#DDDDDD</color>
+
+    <color name="man_blue">#4981A9</color>
+    <color name="woman_pink">#FFA3A5</color>
 
     <color name="red">#870c09</color>
 

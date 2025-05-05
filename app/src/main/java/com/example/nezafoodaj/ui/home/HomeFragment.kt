@@ -2,7 +2,6 @@ package com.example.nezafoodaj.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +10,11 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nezafoodaj.R
-import com.example.nezafoodaj.adapters.RecipeAdapter
 import com.example.nezafoodaj.adapters.RecipeAdapterHome
 import com.example.nezafoodaj.data.RecipeRepository
-import com.example.nezafoodaj.main.RecipeDetailActivity
+import com.example.nezafoodaj.activities.main.RecipeDetailActivity
 import com.example.nezafoodaj.models.Recipe
 import com.google.android.material.chip.ChipGroup
-import java.util.Calendar
-import java.util.Date
 
 class HomeFragment : Fragment() {
 

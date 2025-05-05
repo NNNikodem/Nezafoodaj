@@ -54,6 +54,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.android.material:material:1.11.0")
+    implementation("com.github.yalantis:ucrop:2.2.9-native")
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

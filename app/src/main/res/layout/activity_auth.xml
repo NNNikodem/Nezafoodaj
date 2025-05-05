@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="@color/auth_background"
     android:padding="24dp"
-    tools:context=".auth.AuthActivity"
+    tools:context=".activities.auth.AuthActivity"
     android:orientation="vertical">
 
     <!-- Nadpis -->

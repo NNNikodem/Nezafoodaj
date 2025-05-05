@@ -1,4 +1,4 @@
-package com.example.nezafoodaj.main
+package com.example.nezafoodaj.activities.main
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

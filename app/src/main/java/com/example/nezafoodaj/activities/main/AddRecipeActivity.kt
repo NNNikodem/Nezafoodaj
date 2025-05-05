@@ -1,11 +1,10 @@
-package com.example.nezafoodaj.main
+package com.example.nezafoodaj.activities.main
 
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -14,14 +13,10 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.marginBottom
 import com.bumptech.glide.Glide
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.data.RecipeRepository
@@ -172,12 +167,6 @@ class AddRecipeActivity : AppCompatActivity() {
     }
     private fun saveRecipe() {
         btnSave.isEnabled = false
-        if(isEditMode)
-        {
-            setResult(Activity.RESULT_OK)
-            finish()
-            return
-        }
         progressBar.visibility = View.VISIBLE
         progressBar.progress = 0
 
@@ -203,13 +192,13 @@ class AddRecipeActivity : AppCompatActivity() {
         else {
             Tasks.forResult(null) // empty task
         }
-//TODO: LOOP THROUGH ALL STEPS AND INGREDIENTS TO CHECK IF THEY CHANGED FROM ORIGINAL RECIPE (-->EDIT MODE)
         // 2. LOOP THROUGH ALL STEPS AND CHECK IF THERE IS AN IMAGE TO UPLOAD
         for (i in 0 until stepsContainer.childCount) {
             val row = stepsContainer.getChildAt(i)
-            val imageUri = stepImageUris[row]  // Now using the row as the key
-
-            if (imageUri != null) {
+            val imageUri = stepImageUris[row]
+            Log.d("AddRecipeActivity", "imageUri: $imageUri")
+            //check if there is an imageUri and if it is new from device (content://)
+            if (imageUri != null && imageUri.toString().startsWith("content://")) {
                 val storageRef = FirebaseStorage.getInstance().reference
                     .child("recipe_steps/$userId/$recipeId/step_$i.jpg")
 
@@ -220,13 +209,13 @@ class AddRecipeActivity : AppCompatActivity() {
                     if (!task.isSuccessful) throw task.exception ?: Exception("Upload failed")
                     storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
-                    // SET THE STEP IMAGE URI AND CHECKMARK
-                    stepImageUris[row] = uri  // Store the URI using the row as the key
+                    stepImageUris[row] = uri
                     row.findViewById<ImageView>(R.id.imageUploadCheckmark).visibility = View.VISIBLE
                 }
                 stepImageUploadTasks.add(uploadTask)
             }
         }
+
 
         // 3. WAIT FOR ALL TASKS AND THEN SAVE RECIPE
         Tasks.whenAllComplete(listOfNotNull(finalUploadTask) + stepImageUploadTasks)
@@ -268,36 +257,24 @@ class AddRecipeActivity : AppCompatActivity() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         // FINAL RECIPE SAVING
-        val recipe = Recipe(
-            userId = userId,
-            name = recipeName,
-            name_search = normalizedName,
-            description = description,
-            prepTime = prepTime,
-            ingredients = ingredients,
-            steps = steps,
-            finalImage = finalImage ?: "",
-            dateCreated = System.currentTimeMillis(),
-            rating = 0.0,
-            ratingCount = 0
-        )
-        recipe.setId(recipeId)
-        if (validateUploadData(recipe))
+            val recipeDataToUpload = Recipe(
+                userId = userId,
+                name = recipeName,
+                name_search = normalizedName,
+                description = description,
+                prepTime = prepTime,
+                ingredients = ingredients,
+                steps = steps,
+                finalImage = finalImage ?: "",
+                dateCreated = System.currentTimeMillis(),
+                rating = 0.0,
+                ratingCount = 0
+            )
+            recipeDataToUpload.setId(recipeId)
+        if (validateUploadData(recipeDataToUpload))
         {
-            recipeRepository.addRecipe(recipe, recipeId) { success ->
-                if (success) {
-                    Toast.makeText(this, "Recipe saved!", Toast.LENGTH_SHORT).show()
-                    progressBar.progress = 100
-                    progressBar.visibility = View.GONE
-                    btnSave.isEnabled = true
-                    setResult(Activity.RESULT_OK)
-                    finish()
-                } else {
-                    Toast.makeText(this, "Failed to save recipe.", Toast.LENGTH_SHORT).show()
-                    progressBar.visibility = View.GONE
-                    btnSave.isEnabled = true
-                }
-            }
+            if(isEditMode) {updateRecipe(recipeDataToUpload, editingRecipeId?:"")}
+            else {createRecipe(recipeDataToUpload, recipeId)}
         }
         else{
             progressBar.visibility = View.GONE
@@ -451,5 +428,48 @@ class AddRecipeActivity : AppCompatActivity() {
 
         // Ak všetko prešlo
         return true
+    }
+    //SEND TO REPO
+    private fun createRecipe(recipe:Recipe, recipeId:String)
+    {
+        recipeRepository.addRecipe(recipe, recipeId) { success ->
+            if (success) {
+                Toast.makeText(this, "Recipe saved!", Toast.LENGTH_SHORT).show()
+                progressBar.progress = 100
+                progressBar.visibility = View.GONE
+                btnSave.isEnabled = true
+                setResult(Activity.RESULT_OK)
+                finish()
+            } else {
+                Toast.makeText(this, "Failed to save recipe.", Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+                btnSave.isEnabled = true
+            }
+        }
+    }
+    private fun updateRecipe(recipeToUpload:Recipe, recipeId:String) {
+        val recipeDataToUpload = mapOf(
+            "name" to recipeToUpload.name,
+            "name_search" to recipeToUpload.name_search,
+            "description" to recipeToUpload.description,
+            "prepTime" to recipeToUpload.prepTime,
+            "ingredients" to recipeToUpload.ingredients,
+            "steps" to recipeToUpload.steps,
+            "finalImage" to (recipeToUpload.finalImage),
+            "dateUpdated" to System.currentTimeMillis()
+        )
+        recipeRepository.updateRecipe(recipeId, recipeDataToUpload) { success ->
+            if (success) {
+                Toast.makeText(this, "Recept bol úspešne zmenený.", Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+                btnSave.isEnabled = true
+                setResult(Activity.RESULT_OK)
+                finish()
+            } else {
+                Toast.makeText(this, "Nepodarilo sa zmeniť recept.", Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+                btnSave.isEnabled = true
+            }
+        }
     }
 }

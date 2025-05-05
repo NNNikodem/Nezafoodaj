@@ -3,9 +3,6 @@ package com.example.nezafoodaj.ui.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +12,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.adapters.RecipeAdapter
 import com.example.nezafoodaj.data.RecipeRepository
-import com.example.nezafoodaj.main.AddRecipeActivity
-import com.example.nezafoodaj.main.RecipeDetailActivity
+import com.example.nezafoodaj.activities.main.RecipeDetailActivity
 import com.example.nezafoodaj.models.Recipe
 import com.google.firebase.auth.FirebaseAuth
 

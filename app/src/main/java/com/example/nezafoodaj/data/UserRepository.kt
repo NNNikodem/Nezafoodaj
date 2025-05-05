@@ -11,14 +11,30 @@ class UserRepository {
     private val db = FirebaseFirestore.getInstance().collection("users")
     private val auth = FirebaseAuth.getInstance()
     fun addUser(user: User) {
-        db.document(user.id)  // 👈 Use the UID as the document ID
+        db.document(user.id)
             .set(user)
-            .addOnSuccessListener {
-                Log.d("UserRepository", "User saved with UID: ${user.id}")
-            }
-            .addOnFailureListener {
-                Log.e("UserRepository", "Failed to save user: ${it.message}")
-            }
+    }
+    fun updateUser(
+        userId: String,
+        userName: String,
+        userAge: Int,
+        userGender: String,
+        onComplete: (Boolean) -> Unit
+    ) {
+        db.document(userId).update(
+            "name", userName,
+            "age", userAge,
+            "gender", userGender
+        ).addOnSuccessListener {
+            onComplete(true)
+        }.addOnFailureListener {
+            onComplete(false)
+        }
+    }
+    fun updateUserPhoto(userId: String, photoUrl: String) {
+        db.document(userId).update(
+            "profilePhotoURL", photoUrl
+        )
     }
     fun checkIfEmailInUse(email: String, onComplete: (Boolean) -> Unit) {
         db.whereEqualTo("email", email)
@@ -74,6 +90,22 @@ class UserRepository {
                 onComplete(null, false)
             }
     }
+    fun getUserById(userId: String, onComplete: (User?, Boolean) -> Unit) {
+        db.document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    onComplete(user, true)
+                } else {
+                    onComplete(null, false)
+                }
+            }
+            .addOnFailureListener {
+                onComplete(null, false)
+                }
+    }
+
+
     fun getFavoriteRecipes(userId: String, onComplete: (List<String>?, Boolean) -> Unit) {
         db.document(userId)
             .get()

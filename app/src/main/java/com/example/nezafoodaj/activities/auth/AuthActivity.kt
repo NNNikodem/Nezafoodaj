@@ -1,16 +1,15 @@
-package com.example.nezafoodaj.auth
+package com.example.nezafoodaj.activities.auth
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.nezafoodaj.data.UserRepository
 import com.example.nezafoodaj.databinding.ActivityAuthBinding
-import com.example.nezafoodaj.main.MainActivity
+import com.example.nezafoodaj.activities.main.MainActivity
 import com.example.nezafoodaj.models.User
 import com.google.firebase.auth.FirebaseAuth
 
@@ -82,7 +81,7 @@ class AuthActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = User(name, email, auth.currentUser?.uid ?: "", true)
+                    val user = User(name, email, "", 0, "", System.currentTimeMillis(), auth.currentUser?.uid ?: "", false, emptyList())
                     userRepo.addUser(user)
                     loginUser(email, password)
                     Toast.makeText(this, "Registrácia úspešná", Toast.LENGTH_SHORT).show()
@@ -162,6 +161,9 @@ class AuthActivity : AppCompatActivity() {
             putString("userEmail", user.email)
             putString("userId", user.id)
             putBoolean("admin", user.admin)
+            putInt("userAge", user.age)
+            putString("userGender", user.gender)
+            putLong("userSince", user.dateCreated)
             apply()
         }
     }

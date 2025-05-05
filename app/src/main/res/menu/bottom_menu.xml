@@ -12,6 +12,10 @@
         android:icon="@drawable/icon_search"
         android:title="@string/nav_search"
         />
+    <item android:id="@+id/nav_addRecipe"
+        android:icon="@drawable/icon_add"
+        android:title="@string/nav_addRecipe"
+        />
     <item android:id="@+id/nav_myRecipes"
         android:icon="@drawable/icon_myrecipes"
         android:title="@string/nav_myRecipes"

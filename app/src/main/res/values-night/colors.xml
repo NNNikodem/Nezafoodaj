@@ -19,6 +19,7 @@
     <color name="text_color">#FFFFFFFF</color>
     <color name="component_background">#2D2D2D</color>
     <color name="component_border">@color/lightgray</color>
+    <color name="header_color">@color/straw</color>
     <color name="button_color">@color/darkgray</color>
     <color name="input_background">@color/darkgray</color>
     <color name="input_border">@color/lightgray</color>

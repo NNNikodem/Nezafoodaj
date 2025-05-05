@@ -3,12 +3,10 @@ package com.example.nezafoodaj.ui.myRecipes
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.RecyclerView
@@ -17,12 +15,9 @@ import com.example.nezafoodaj.R
 import com.example.nezafoodaj.adapters.RecipeAdapter
 import com.example.nezafoodaj.data.RecipeRepository
 import com.example.nezafoodaj.data.UserRepository
-import com.example.nezafoodaj.main.AddRecipeActivity
-import com.example.nezafoodaj.main.RecipeDetailActivity
-import com.example.nezafoodaj.models.Ingredient
+import com.example.nezafoodaj.activities.main.AddRecipeActivity
+import com.example.nezafoodaj.activities.main.RecipeDetailActivity
 import com.example.nezafoodaj.models.Recipe
-import com.example.nezafoodaj.models.Step
-import com.example.nezafoodaj.models.UnitType
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth

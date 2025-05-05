@@ -1,30 +1,23 @@
-package com.example.nezafoodaj.main
+package com.example.nezafoodaj.activities.main
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
-import android.text.InputType
-import android.util.Log
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.data.NoteRepository
 import com.example.nezafoodaj.data.RatingRepository
@@ -33,7 +26,6 @@ import com.example.nezafoodaj.data.UserRepository
 import com.example.nezafoodaj.models.Note
 import com.example.nezafoodaj.models.Rating
 import com.example.nezafoodaj.models.Recipe
-import com.example.nezafoodaj.models.UnitType
 import com.example.nezafoodaj.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,6 +38,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var recipe: Recipe
     private lateinit var user: User
     private lateinit var authorName: String
+    private lateinit var author: User
     private lateinit var menuRef: Menu
     private var currentNote: Note? = null
     private var isFavorite = false
@@ -60,6 +53,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var textViewName: TextView
     private lateinit var imageViewFinal: ImageView
     private lateinit var textViewAuthor: TextView
+    private lateinit var ivAuthorPhoto: ImageView
     private lateinit var textViewDate: TextView
     private lateinit var textViewRating: TextView
     private lateinit var textViewDescription: TextView
@@ -85,6 +79,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         textViewName = findViewById(R.id.textViewRecipeName)
         imageViewFinal = findViewById(R.id.imageViewFinal)
         textViewAuthor = findViewById(R.id.textViewAuthor)
+        ivAuthorPhoto = findViewById(R.id.iv_authorPhoto)
         textViewDate = findViewById(R.id.textViewDate)
         textViewRating = findViewById(R.id.textViewRating)
         textViewDescription = findViewById(R.id.textViewDescription)
@@ -239,6 +234,7 @@ class RecipeDetailActivity : AppCompatActivity() {
             if (success && recipe != null) {
                 this.recipe = recipe
                 showRecipe(recipe)
+                loadAuthor(recipe.userId)
                 toggleDeleteButton()
                 setupToolbar()
             } else {
@@ -247,6 +243,32 @@ class RecipeDetailActivity : AppCompatActivity() {
             }
         }
     }
+    private fun loadAuthor(authorId: String)
+    {
+        userRepository.getUserById(authorId)
+        { user, success ->
+            if (success && user != null) {
+                author = user
+                authorName = author.name
+                textViewAuthor.text = authorName
+                if (author.profilePhotoURL.isNotEmpty()) {
+                    setPhoto(author.profilePhotoURL)
+                }
+            }
+            else {
+                textViewAuthor.text = "Neznámy autor"
+            }
+        }
+    }
+    private fun setPhoto(uri: String)
+    {
+        val radiusInDp = 12
+        val radiusInPx = (radiusInDp * resources.displayMetrics.density).toInt()
+        Glide.with(this)
+            .load(uri)
+            .transform(RoundedCorners(radiusInPx))
+            .into(ivAuthorPhoto)
+    }
     private fun loadUser() {
         userRepository.getCurrentUserData { fetchedUser, success ->
             if (success && fetchedUser != null) {
@@ -254,7 +276,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                 toggleDeleteButton()
             }
             else {
-                Toast.makeText(this, "Chyba pri načítaní usera", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Chyba pri načítaní tvojich údajov", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -265,13 +287,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         if (recipe.finalImage.isNotEmpty()) {
             Glide.with(this).load(recipe.finalImage).into(imageViewFinal)
         }
-        userRepository.getUserNameById(recipe.userId, { name, success ->
-            if (success && name != null) {
-                textViewAuthor.text = name
-            } else {
-                textViewAuthor.text = "Neznámy autor"
-            }
-            })
+
         textViewDate.text = recipe.formatTimestamp(recipe.dateCreated)
 
         ratingRepository.getRatingsForRecipe(recipeId) { average, count ->

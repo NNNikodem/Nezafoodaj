@@ -33,6 +33,11 @@ class RecipeRepository {
                 onFailure(exception)
             }
     }
+    fun updateRecipe(recipeId: String, updatedData: Map<String, Any>, onComplete: (Boolean) -> Unit) {
+        db.document(recipeId).update(updatedData)
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
+    }
     fun removeAllRatings(recipeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         ratingsDb.whereEqualTo("recipeId", recipeId)
             .get().addOnSuccessListener { querySnapshot ->
@@ -101,7 +106,6 @@ class RecipeRepository {
                 onComplete(null, false)
             }
     }
-
     fun searchRecipesByName(query: String, limit: Long = 10, onComplete: (List<Recipe>?, Boolean) -> Unit) {
         val normalizedQuery = normalizeText(query)
 

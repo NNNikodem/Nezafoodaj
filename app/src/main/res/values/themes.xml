@@ -13,7 +13,7 @@
     </style>
     <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:textColor">@color/straw</item>
-        <item name="android:enabled">@color/white</item>
+        <item name="android:enabled">@color/straw</item>
         <item name="chipCornerRadius">0dp</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="chipStrokeColor">@color/component_border</item>

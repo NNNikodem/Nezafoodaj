@@ -1,47 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".ProfileFragment"
-    android:padding="16dp">
-
-    <ImageView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/account_circle_150dp"
-        app:tint="@color/straw"
-        android:layout_gravity="center_horizontal"
-        />
-
-    <TextView
-        android:id="@+id/tv_userName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="TESTER"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"/>
-    <TextView
-        android:id="@+id/tv_userEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="test@test.sk"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:layout_marginTop="30dp"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <ImageButton
-        android:id="@+id/btnLogout"
-        android:src="@drawable/icon_logout"
-        android:background="@color/salmon_pink"
+        android:id="@+id/btnUserSettings"
+        android:src="@drawable/settings_24dp"
+        android:backgroundTint="@color/salmon_pink"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="Log Out"
-        android:layout_gravity="bottom|end"
-        />
+        android:layout_margin="20dp"
+        android:layout_gravity="end|top"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        >
 
+        <!-- Profile photo -->
+        <ImageView
+            android:id="@+id/iv_profilePhoto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/account_circle_150dp"
+            android:layout_marginTop="24dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Profile Image"
+            android:background="@drawable/profile_photo_background" />
+
+        <!-- Name -->
+        <TextView
+            android:id="@+id/tv_userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[NAME]"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp" />
+        <include layout="@layout/layout_component_divider" />
+
+        <!-- Email (non-editable) -->
+        <TextView
+            android:id="@+id/tv_userEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[EMAIL@EMAIL.SK]"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <!-- Age -->
+        <TextView
+            android:id="@+id/et_userAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="[VEK]"
+            android:layout_marginTop="24dp"/>
+
+        <!-- Gender -->
+        <TextView
+            android:id="@+id/et_userGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="[POHLAVIE]" />
+
+        <!-- Date created -->
+        <TextView
+            android:id="@+id/tv_userSince"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="[REGISTROVANÝ OD: dateCreated]"
+            android:textColor="@android:color/darker_gray"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+    <!-- Logout -->
+    <ImageButton
+        android:id="@+id/btnLogout"
+        android:src="@drawable/icon_logout"
+        android:backgroundTint="@color/salmon_pink"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="Log Out"
+        android:layout_margin="20dp"
+        android:layout_gravity="end|bottom"/>
 </FrameLayout>
