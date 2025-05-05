@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nezafoodaj.R
@@ -27,6 +28,8 @@ class HomeFragment : Fragment() {
     private lateinit var topRatedRecipeAdapter: RecipeAdapterHome
     private lateinit var chipGroupTimeFilter: ChipGroup
 
+    private lateinit var progressBar: ProgressBar
+
     private val recipeRepository = RecipeRepository()
     private var allRecipes: List<Recipe> = listOf()
 
@@ -39,9 +42,10 @@ class HomeFragment : Fragment() {
         rvLatestRecipes = view.findViewById(R.id.rvLatestRecipes)
         rvTopRatedRecipes = view.findViewById(R.id.rvTopRatedRecipes)
         chipGroupTimeFilter = view.findViewById(R.id.chipGroupTimeFilter)
+        progressBar = view.findViewById(R.id.progressBar)
 
         chipGroupTimeFilter.setOnCheckedStateChangeListener { group, checkedIds ->
-            loadRecipes()
+            updateTopRatedRecipes()
         }
 
         // Setting horizontal layout managers
@@ -72,8 +76,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchRecipes() {
+        progressBar.visibility = View.VISIBLE
         // Fetch the recipes once and store them in memory
         recipeRepository.getAll { recipes, success ->
+            progressBar.visibility = View.GONE
             if (success && recipes != null) {
                 allRecipes = recipes // Store the fetched recipes
                 loadRecipes() // Call loadRecipes to update the UI
@@ -96,6 +102,17 @@ class HomeFragment : Fragment() {
 
         // Update the adapters with the filtered recipes
         latestRecipeAdapter.updateRecipes(latestRecipes)
+        topRatedRecipeAdapter.updateRecipes(topRatedRecipes)
+    }
+    private fun updateTopRatedRecipes() {
+        val timeFilter = getSelectedTimeFilter()
+        val filteredTopRated = when (timeFilter) {
+            "Týždeň" -> allRecipes.filter { it.dateCreated >= getDateDaysAgo(7) }
+            "Mesiac" -> allRecipes.filter { it.dateCreated >= getDateDaysAgo(30) }
+            "Rok" -> allRecipes.filter { it.dateCreated >= getDateDaysAgo(365) }
+            else -> allRecipes
+        }
+        val topRatedRecipes = filteredTopRated.sortedByDescending { it.rating }.take(7)
         topRatedRecipeAdapter.updateRecipes(topRatedRecipes)
     }
 

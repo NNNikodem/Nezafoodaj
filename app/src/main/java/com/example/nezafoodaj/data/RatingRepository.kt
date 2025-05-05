@@ -1,8 +1,11 @@
 package com.example.nezafoodaj.data
 
+import android.util.Log
 import com.example.nezafoodaj.models.Rating
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class RatingRepository {
 
@@ -74,11 +77,21 @@ class RatingRepository {
                     total += rating
                 }
                 val average = if (count > 0) total / count else 0.0
-                recipeDb.document(recipeId).update("rating", average)
-                onComplete(average, count)
+                val flooredRating = roundOffDecimal(average)
+
+                recipeDb.document(recipeId).update("rating", flooredRating)
+                recipeDb.document(recipeId).update("ratingCount", count)
+                onComplete(flooredRating, count)
             }
             .addOnFailureListener {
                 onComplete(0.0, 0)
             }
+    }
+    private fun roundOffDecimal(number: Double): Double {
+        val df = DecimalFormat("#.##").apply {
+            roundingMode = RoundingMode.CEILING
+        }
+        val formatted = df.format(number).replace(",", ".")
+        return formatted.toDouble()
     }
 }

@@ -60,5 +60,33 @@ class UserRepository {
                 onComplete(null, false)
             }
     }
-
+    fun getUserNameById(userId: String, onComplete: (String?, Boolean) -> Unit) {
+        db.document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    onComplete(user?.name, true)
+                    } else {
+                    onComplete(null, false)
+                }
+            }
+            .addOnFailureListener {
+                onComplete(null, false)
+            }
+    }
+    fun getFavoriteRecipes(userId: String, onComplete: (List<String>?, Boolean) -> Unit) {
+        db.document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val favRecipes = document.get("favRecipes") as? List<String> ?: emptyList()
+                    onComplete(favRecipes, true)
+                } else {
+                    onComplete(emptyList(), false)
+                }
+            }
+            .addOnFailureListener {
+                onComplete(null, false)
+            }
+    }
 }

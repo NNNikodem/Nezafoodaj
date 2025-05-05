@@ -1,11 +1,16 @@
 package com.example.nezafoodaj.main
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -16,13 +21,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.nezafoodaj.R
+import com.example.nezafoodaj.data.NoteRepository
 import com.example.nezafoodaj.data.RatingRepository
 import com.example.nezafoodaj.data.RecipeRepository
 import com.example.nezafoodaj.data.UserRepository
+import com.example.nezafoodaj.models.Note
 import com.example.nezafoodaj.models.Rating
 import com.example.nezafoodaj.models.Recipe
 import com.example.nezafoodaj.models.UnitType
@@ -37,18 +45,25 @@ class RecipeDetailActivity : AppCompatActivity() {
 
     private lateinit var recipe: Recipe
     private lateinit var user: User
+    private lateinit var authorName: String
+    private lateinit var menuRef: Menu
+    private var currentNote: Note? = null
+    private var isFavorite = false
 
     private lateinit var ratingRepository: RatingRepository
     private lateinit var recipeRepository: RecipeRepository
     private lateinit var userRepository: UserRepository
+    private lateinit var noteRepository: NoteRepository
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var textViewName: TextView
     private lateinit var imageViewFinal: ImageView
+    private lateinit var textViewAuthor: TextView
     private lateinit var textViewDate: TextView
     private lateinit var textViewRating: TextView
     private lateinit var textViewDescription: TextView
+    private lateinit var textViewPrepTime: TextView
     private lateinit var layoutIngredients: LinearLayout
     private lateinit var layoutSteps: LinearLayout
     private lateinit var ratingBar: RatingBar
@@ -62,15 +77,18 @@ class RecipeDetailActivity : AppCompatActivity() {
         ratingRepository = RatingRepository()
         recipeRepository = RecipeRepository()
         userRepository = UserRepository()
+        noteRepository = NoteRepository()
 
         recipeId = intent.getStringExtra("recipeId") ?: return
         userId = auth.currentUser?.uid ?: return
         // Bind views
         textViewName = findViewById(R.id.textViewRecipeName)
         imageViewFinal = findViewById(R.id.imageViewFinal)
+        textViewAuthor = findViewById(R.id.textViewAuthor)
         textViewDate = findViewById(R.id.textViewDate)
         textViewRating = findViewById(R.id.textViewRating)
         textViewDescription = findViewById(R.id.textViewDescription)
+        textViewPrepTime = findViewById(R.id.textViewPrepTime)
         layoutIngredients = findViewById(R.id.layoutIngredients)
         layoutSteps = findViewById(R.id.layoutSteps)
         ratingBar = findViewById(R.id.ratingBar)
@@ -93,16 +111,127 @@ class RecipeDetailActivity : AppCompatActivity() {
                 .setNegativeButton("Zrušiť", null)
                 .show()
         }
-
-        setupToolbar()
         loadUser()
         loadRecipe()
     }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_recipe_detail, menu)
+        if (menu != null) {
+            menuRef = menu
+            loadUserNote()
+            checkIfFavorite()
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_note -> {
+                if (currentNote == null) showWriteNoteDialog()
+                else showExistingNoteDialog()
+                true
+            }
+            R.id.action_bookmark -> {
+                addToFavorites()
+                true
+            }
+            R.id.action_bookmarkRemove -> {
+                removeFromFavorites()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+    private fun loadUserNote() {
+        FirebaseFirestore.getInstance().collection("notes")
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("recipeId", recipeId)
+            .get()
+            .addOnSuccessListener { docs ->
+                if (!docs.isEmpty) {
+                    currentNote = docs.first().toObject(Note::class.java)
+                }
+            }
+    }
+    private fun showWriteNoteDialog(existingText: String? = null) {
+        val layout = layoutInflater.inflate(R.layout.layout_component_addnote, null)
+        val editText = layout.findViewById<EditText>(R.id.editTextNote)
+        existingText?.let { editText.setText(it) }
+
+        AlertDialog.Builder(this)
+            .setTitle("Tvoja poznámka k receptu")
+            .setView(layout)
+            .setPositiveButton("Uložiť") { _, _ ->
+                val noteText = editText.text.toString().trim()
+                if (noteText.isNotEmpty()) {
+                    val note = Note(userId, recipeId, noteText)
+                    saveNoteToFirestore(note)
+                } else {
+                    Toast.makeText(this, "Poznámka je prázdna!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Zrušiť", null)
+            .show()
+    }
+    private fun showExistingNoteDialog() {
+        val layout = layoutInflater.inflate(R.layout.layout_component_shownote, null)
+        val textView = layout.findViewById<TextView>(R.id.textViewNote)
+        textView.text = currentNote?.noteText
+
+        AlertDialog.Builder(this)
+            .setTitle("Tvoja poznámka k receptu")
+            .setView(layout)
+            .setPositiveButton("OK", null)
+            .setNegativeButton("Upraviť") { _, _ -> showWriteNoteDialog(currentNote?.noteText) }
+            .show()
+    }
+    private fun saveNoteToFirestore(note: Note) {
+        noteRepository.addOrUpdateNote(note) { savedNote ->
+            currentNote = savedNote
+            Toast.makeText(this, "Poznámka uložená", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun checkIfFavorite() {
+        recipeRepository.checkIfFavorite(userId, recipeId) { favorite ->
+            isFavorite = favorite
+            updateBookmarkIcons()
+        }
+    }
+    private fun addToFavorites() {
+        recipeRepository.addRecipeToFavorites(userId, recipeId) { success ->
+            if (success) {
+                Toast.makeText(this, "Pridané do obľúbených", Toast.LENGTH_SHORT).show()
+                isFavorite = true
+                updateBookmarkIcons()
+            } else {
+                Toast.makeText(this, "Nepodarilo sa pridať", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun removeFromFavorites() {
+        recipeRepository.removeRecipeFromFavorites(userId, recipeId) { success ->
+            if (success) {
+                Toast.makeText(this, "Odstránené z obľúbených", Toast.LENGTH_SHORT).show()
+                isFavorite = false
+                updateBookmarkIcons()
+            } else {
+                Toast.makeText(this, "Nepodarilo sa odstrániť", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun updateBookmarkIcons() {
+        setResult(Activity.RESULT_OK)
+        menuRef.findItem(R.id.action_bookmark)?.isVisible = !isFavorite
+        menuRef.findItem(R.id.action_bookmarkRemove)?.isVisible = isFavorite
+    }
+
     private fun setupToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = getString(R.string.activityName_RecipeDetail)
+        toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
+        supportActionBar?.title = recipe.name
         toolbar.setNavigationOnClickListener { finish() }
     }
     private fun loadRecipe() {
@@ -111,6 +240,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                 this.recipe = recipe
                 showRecipe(recipe)
                 toggleDeleteButton()
+                setupToolbar()
             } else {
                 Toast.makeText(this, "Chyba pri načítaní receptu", Toast.LENGTH_SHORT).show()
                 finish()
@@ -135,11 +265,18 @@ class RecipeDetailActivity : AppCompatActivity() {
         if (recipe.finalImage.isNotEmpty()) {
             Glide.with(this).load(recipe.finalImage).into(imageViewFinal)
         }
+        userRepository.getUserNameById(recipe.userId, { name, success ->
+            if (success && name != null) {
+                textViewAuthor.text = name
+            } else {
+                textViewAuthor.text = "Neznámy autor"
+            }
+            })
         textViewDate.text = recipe.formatTimestamp(recipe.dateCreated)
 
         ratingRepository.getRatingsForRecipe(recipeId) { average, count ->
             val text = if (count > 0) {
-                "Hodnotenie: %.1f (%d hodnotení)".format(average, count)
+                "Hodnotenie: %.2f ⭐ (%d hodn.)".format(average, count)
             } else {
                 "Zatiaľ nehodnotené"
             }
@@ -147,13 +284,14 @@ class RecipeDetailActivity : AppCompatActivity() {
         }
 
         textViewDescription.text = recipe.description
+        textViewPrepTime.text = "${recipe.prepTime} min"
         // Clear the existing views
         layoutIngredients.removeAllViews()
         layoutSteps.removeAllViews()
 
         // Add ingredients dynamically using the ingredient_item layout
         for (ingredient in recipe.ingredients) {
-            val unitShort = ingredient.unit.toString()
+            val unitShort = ingredient.unit.shortName
             val ingredientView = layoutInflater.inflate(R.layout.item_ingredient, layoutIngredients, false)
             val ingredientName = ingredientView.findViewById<TextView>(R.id.ingredientName)
             val ingredientAmount = ingredientView.findViewById<TextView>(R.id.ingredientAmount)
@@ -193,7 +331,6 @@ class RecipeDetailActivity : AppCompatActivity() {
         { btnDeleteRecipe.visibility = View.VISIBLE }
         if(recipe.userId == userId)
         { btnDeleteRecipe.visibility = View.VISIBLE }
-        Log.d("TOGGLE_DELETE", "Recipe ID: ${recipe.userId}, User.ID: ${user.id}, UserID: $userId")
     }
     private fun saveRating() {
         val ratingValue = ratingBar.rating.toDouble()
@@ -204,7 +341,8 @@ class RecipeDetailActivity : AppCompatActivity() {
                 // Also Update the rating
                 ratingRepository.getRatingsForRecipe(recipeId) { average, count ->
                     val textViewRating = findViewById<TextView>(R.id.textViewRating)
-                    textViewRating.text = "Hodnotenie: %.1f (%d hodnotení)".format(average, count)
+                    textViewRating.text = "Hodnotenie: %.1f ⭐ (%d hodn.)".format(average, count)
+                    setResult(Activity.RESULT_OK)
                 }
 
             } else {

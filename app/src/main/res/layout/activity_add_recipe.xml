@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:title="@string/activityName_AddRecipe"
-        android:titleTextColor="@android:color/white" />
+        android:title="@string/activityName_AddRecipe" />
     <ProgressBar
         android:id="@+id/progressBarUpload"
         style="@android:style/Widget.ProgressBar.Horizontal"

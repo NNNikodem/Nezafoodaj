@@ -15,8 +15,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:orientation="vertical">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -30,9 +29,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/detail_recipeName"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
-
+                android:textStyle="bold" />
+            <include layout="@layout/layout_component_divider" />
             <!-- Final image -->
             <ImageView
                 android:id="@+id/imageViewFinal"
@@ -43,6 +41,59 @@
                 android:contentDescription="Final Image"
                 android:layout_marginBottom="16dp" />
 
+                <!-- Author Created -->
+                <TextView
+                    android:id="@+id/textViewAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Author]"
+                    android:textStyle="bold"
+                    android:layout_gravity="end"
+                    />
+                <!-- Date Created -->
+                <TextView
+                    android:id="@+id/textViewDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[Date Created]"
+                    android:textStyle="bold"
+                    android:layout_gravity="end"
+                    />
+                <!-- Rating -->
+                <TextView
+                    android:id="@+id/textViewRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[HODNOTENIE: --]"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="end"
+                    />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical">
+
+                <!-- PrepTime icon -->
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:src="@drawable/timer_24dp"
+                    app:tint="@color/darkgray" />
+
+                <!-- PrepTime value -->
+                <TextView
+                    android:id="@+id/textViewPrepTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[ČAS PRÍPRAVY]"
+                    android:textSize="16sp"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <include layout="@layout/layout_component_divider" />
             <!-- Description -->
             <TextView
                 android:id="@+id/textViewDescription"
@@ -50,32 +101,16 @@
                 android:layout_height="wrap_content"
                 android:text="[DESCRIPTION]"
                 android:textSize="16sp"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Date Created -->
-            <TextView
-                android:id="@+id/textViewDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="[Date Created]"
-                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
                 />
-            <!-- Rating -->
-            <TextView
-                android:id="@+id/textViewRating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hodnotenie: --"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
-
+            <include layout="@layout/layout_component_divider" />
             <!-- Ingredients title -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/detail_Ingredients"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:layout_marginBottom="8dp" />
 
             <!-- Ingredients list -->
@@ -92,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/detail_Steps"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:layout_marginBottom="8dp" />
 
             <!-- Steps list -->
@@ -127,6 +162,8 @@
                         android:rating="0"
                         android:stepSize="0.5"
                         android:isIndicator="false"
+                        android:progressTint="@color/salmon_pink"
+                        android:progressBackgroundTint="@color/lightgray"
                         />
 
                     <!-- Submit Rating Button -->

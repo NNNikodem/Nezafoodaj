@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nezafoodaj.R
 import com.example.nezafoodaj.adapters.RecipeAdapter
 import com.example.nezafoodaj.data.RecipeRepository
+import com.example.nezafoodaj.main.AddRecipeActivity
 import com.example.nezafoodaj.main.RecipeDetailActivity
 import com.example.nezafoodaj.models.Recipe
 import com.google.firebase.auth.FirebaseAuth
@@ -29,10 +32,8 @@ class SearchFragment : Fragment() {
     private lateinit var rvSearchResults: RecyclerView
     private lateinit var tvNoResults: TextView
     private lateinit var progressBarLoading: ProgressBar
-
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
     private lateinit var recipeAdapter: RecipeAdapter
-
-    private var allRecipes = mutableListOf<Recipe>()
     private val recipeRepository = RecipeRepository()
 
     override fun onCreateView(
@@ -41,71 +42,51 @@ class SearchFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
 
-        // Inicializácia UI komponentov
         etSearch = view.findViewById(R.id.etSearch)
         rvSearchResults = view.findViewById(R.id.rvSearchResults)
         tvNoResults = view.findViewById(R.id.tvNoResults)
         progressBarLoading = view.findViewById(R.id.progressBarLoading)
 
-        // Inicializácia RecyclerView a adaptéra
         rvSearchResults.layoutManager = LinearLayoutManager(requireContext())
-        recipeAdapter = RecipeAdapter(mutableListOf()) { recipeId ->
+        val onRecipeClick: (String) -> Unit = { recipeId ->
             hideKeyboard()
-
-            // Vytvorenie intentu na otvorenie detailu receptu
             val intent = Intent(requireContext(), RecipeDetailActivity::class.java)
             intent.putExtra("recipeId", recipeId)
             startActivity(intent)
         }
-
+        val onEditClick: (String) -> Unit = {}
+        recipeAdapter = RecipeAdapter(userId?:"", mutableListOf(), onRecipeClick, onEditClick)
         rvSearchResults.adapter = recipeAdapter
 
-        // Načítanie všetkých receptov
-        loadRecipes()
-
-        // Pridanie TextWatcher pre EditText (vyhľadávanie)
-        etSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                filterRecipes(s.toString())
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                // Trigger your search here
+                val query = etSearch.text.toString().trim()
+                searchRecipes(query)
+                hideKeyboard()
+                true
+            } else {
+                false
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        }
 
         return view
     }
 
-    // Načítanie všetkých receptov (bez obmedzenia na používateľa)
-    private fun loadRecipes() {
+    private fun searchRecipes(query: String) {
         showLoading(true)
-
-        recipeRepository.getAll { recipes, success ->
+        recipeRepository.searchRecipesByName(query) { recipes, success ->
             showLoading(false)
             if (success && recipes != null) {
-                allRecipes = recipes.toMutableList()
-                recipeAdapter.updateRecipes(allRecipes)
-                checkIfEmpty(allRecipes)
+                recipeAdapter.updateRecipes(recipes)
+                checkIfEmpty(recipes)
             } else {
+                recipeAdapter.updateRecipes(emptyList())
                 checkIfEmpty(emptyList())
             }
         }
     }
 
-    // Filtrovanie receptov podľa názvu
-    private fun filterRecipes(query: String) {
-        val filteredList = if (query.isEmpty()) {
-            allRecipes
-        } else {
-            allRecipes.filter { recipe ->
-                recipe.name.contains(query, ignoreCase = true)
-            }
-        }
-        recipeAdapter.updateRecipes(filteredList)
-        checkIfEmpty(filteredList)
-    }
-
-    // Skontrolovanie, či je zoznam prázdny
     private fun checkIfEmpty(list: List<Recipe>) {
         if (list.isEmpty()) {
             rvSearchResults.visibility = View.GONE
@@ -116,16 +97,16 @@ class SearchFragment : Fragment() {
         }
     }
 
-    // Zobrazenie načítavacieho indikátora
     private fun showLoading(isLoading: Boolean) {
         progressBarLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
-        rvSearchResults.visibility = if (isLoading) View.GONE else View.VISIBLE
+        if (isLoading) {
+            rvSearchResults.visibility = View.GONE
+            tvNoResults.visibility = View.GONE
+        }
     }
 
-    // Skrytie klávesnice
     private fun hideKeyboard() {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }
-

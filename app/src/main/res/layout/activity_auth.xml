@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_moss_green"
+    android:backgroundTint="@color/auth_background"
     android:padding="24dp"
     tools:context=".auth.AuthActivity"
     android:orientation="vertical">
@@ -17,11 +17,18 @@
         android:text="Prihlásenie"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/tvEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMain" />
     <!-- Email -->
     <TextView
         android:id="@+id/tvEmail"
@@ -29,7 +36,6 @@
         android:layout_height="wrap_content"
         android:text="Email:"
         android:textSize="18sp"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/et_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -54,7 +60,6 @@
         android:layout_height="wrap_content"
         android:text="Meno:"
         android:textSize="18sp"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_email"
@@ -79,7 +84,6 @@
         android:layout_height="wrap_content"
         android:text="Heslo:"
         android:textSize="18sp"
-        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/et_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -102,9 +106,8 @@
         android:id="@+id/tvPasswordRepeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Over heslo:"
+        android:text="Zopakuj heslo:"
         android:textSize="18sp"
-        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/et_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -122,17 +125,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPasswordRepeat" />
 
-    <!-- Switch Auth Mode (Register/Login) -->
-
-    <!-- Guideline (lepšie prispôsobenie na rôznych obrazovkách) -->
     <Button
         android:id="@+id/btnAuth"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="12dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/button_color"
         android:text="Prihlásiť sa"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvSwitchAuth"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +145,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:text="Nemáš účet? Zaregistruj sa."
-        android:textColor="@color/straw"
+        android:textColor="@color/text_color"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/component_background"/> <!-- background color inside the border -->
+    <stroke android:color="@color/component_border" android:width="2dp"/> <!-- border color and width -->
+</shape>

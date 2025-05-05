@@ -1,47 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="180dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="20dp">
-
-    <FrameLayout
+    android:background="@android:color/transparent">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="150dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_margin="8dp"
+        android:layout_gravity="center|bottom"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp"
+        >
+            <!-- Content behind the button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="14dp">
 
-        <!-- Content behind the button -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="14dp">
+                <TextView
+                    android:id="@+id/textViewRecipeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recipe Name"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/textViewRecipeName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recipe Name"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/textViewIngredients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Ingredients"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-            <TextView
-                android:id="@+id/textViewIngredients"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ingredients"
-                android:textAppearance="?android:attr/textAppearanceSmall"/>
+                <TextView
+                    android:id="@+id/textViewStepsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="StepsCount"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+                <TextView
+                    android:id="@+id/textViewRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="8dp"
+                    android:text="Rating"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView_FinalImage"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop= "5dp"
+                android:layout_marginBottom= "5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_gravity="end"
+                android:contentDescription="@string/recipeList_finalImage_conDesc"
+                />
 
-            <TextView
-                android:id="@+id/textViewStepsCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="StepsCount"
-                android:textAppearance="?android:attr/textAppearanceSmall"/>
-
-        </LinearLayout>
-
-
-    </FrameLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnEditRecipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:src="@drawable/baseline_edit_document_24"
+        app:elevation="10dp"
+        app:maxImageSize="32dp"
+        android:scaleType="centerInside"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="2dp"
+    />
+</FrameLayout>

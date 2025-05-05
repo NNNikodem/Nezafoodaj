@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme for Night Mode -->
+    <style name="Base.Theme.Nezafoodaj" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/dark_moss_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/salmon_pink</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurface">@color/dark_moss_green</item> <!-- Toolbars -->
+        <item name="colorOnSurface">@color/straw</item>     <!-- Icons on toolbars -->
+
+
+
+    </style>
+
+    <style name="Theme.Nezafoodaj" parent="Base.Theme.Nezafoodaj" />
+</resources>

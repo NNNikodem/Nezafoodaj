@@ -1,8 +1,12 @@
 package com.example.nezafoodaj.data
 
+import android.util.Log
 import com.example.nezafoodaj.models.Recipe
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.Normalizer
+import java.util.regex.Pattern
 
 class RecipeRepository {
     private val db = FirebaseFirestore.getInstance().collection("recipes")
@@ -96,5 +100,63 @@ class RecipeRepository {
             .addOnFailureListener {
                 onComplete(null, false)
             }
+    }
+
+    fun searchRecipesByName(query: String, limit: Long = 10, onComplete: (List<Recipe>?, Boolean) -> Unit) {
+        val normalizedQuery = normalizeText(query)
+
+        db.orderBy("name_search")
+            .startAt(normalizedQuery)
+            .endAt("$normalizedQuery\uf8ff")
+            .limit(limit)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val recipes = querySnapshot.documents.mapNotNull { doc ->
+                    doc.toObject(Recipe::class.java)
+                }
+                onComplete(recipes, true)
+            }
+            .addOnFailureListener {
+                onComplete(null, false)
+            }
+    }
+    fun addRecipeToFavorites(userId: String, recipeId: String, onComplete: (Boolean) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users")
+            .document(userId)
+            .update("favRecipes", FieldValue.arrayUnion(recipeId))
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+            .addOnFailureListener { e ->
+                onComplete(false)
+            }
+    }
+    fun removeRecipeFromFavorites(userId: String, recipeId: String, onComplete: (Boolean) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users")
+            .document(userId)
+            .update("favRecipes", FieldValue.arrayRemove(recipeId))
+            .addOnSuccessListener {
+                onComplete(true)
+            }
+            .addOnFailureListener { e ->
+                onComplete(false)
+            }
+    }
+    fun checkIfFavorite(userId: String, recipeId: String, onComplete: (Boolean) -> Unit) {
+        var isFavorite = false
+        FirebaseFirestore.getInstance().collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { doc ->
+                val favs = doc.get("favRecipes") as? List<*>
+                isFavorite = favs?.contains(recipeId) == true
+                onComplete(isFavorite)
+            }
+    }
+    fun normalizeText(input: String): String {
+        val normalized = Normalizer.normalize(input.lowercase(), Normalizer.Form.NFD)
+        return Pattern.compile("\\p{InCombiningDiacriticalMarks}+").matcher(normalized).replaceAll("")
     }
 }

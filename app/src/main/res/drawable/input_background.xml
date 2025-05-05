@@ -2,8 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="@color/white"/>  <!-- Farba pozadia -->
-    <corners android:radius="12dp"/>       <!-- Zaoblené rohy -->
-    <stroke android:width="2dp" android:color="@color/dark_moss_green"/> <!-- Okraj -->
-    <padding android:left="12dp" android:right="12dp"/> <!-- Padding -->
+    <solid android:color="@color/input_background"/>
+    <corners android:radius="12dp"/>
+    <stroke android:width="2dp" android:color="@color/input_border"/>
+    <padding android:left="12dp" android:right="12dp"/>
 </shape>
