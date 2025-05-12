@@ -77,6 +77,11 @@
     <string name="homefragment_textView_best">Najlepšie recepty</string>
     <string name="homeFragment_miniText">Vitaj na domovskej stránke aplikácie Nezafoodaj.
     Nechaj sa inšpirovať vybranými receptami.</string>
+    <string name="homeFragment_noRecipes">Zatiaľ neexistujú žiadne recepty.</string>
+
+    <!-- MY RECIPES FRAGMENT -->
+    <string name="myRecipes_noRecipesResult">Nemáte ešte žiadne vytvorené recepty.</string>
+    <string name="myRecipes_noFavRecipesResult">Nemáte žiadne obľúbené recepty.</string>
 
     <!-- RECIPE LIST -->
     <string name="recipeList_finalImage_conDesc">Náhľad vysledného obrázka receptu</string>"

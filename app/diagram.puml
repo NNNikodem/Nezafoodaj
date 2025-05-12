@@ -1,0 +1,104 @@
+@startuml Nezafoodaj
+
+class Recipe{
+    +userId: String,
+    +name: String,
+    +name_search: String,
+    +name_keywords: List<String>,
+    +description: String,
+    +ingredients: List<Ingredient>,
+    +steps: List<Step>,
+    +prepTime: Int,
+    +finalImage: String,
+    +dateCreated: Long ,
+    +rating: Double,
+    +ratingCount:
+}
+class User{
+    +name:String,
+    +email:String,
+    +profilePhotoURL:String,
+    +age:Int,
+    +gender:String,
+    +dateCreated:Long,
+    +id:String,
+    +admin:Boolean,
+    +favRecipes: List<String>
+}
+class Note{
+    +userId: String,
+    +recipeId: String,
+    +noteText: String,
+    +timestamp: Long
+}
+class Rating{
+    +userId: String,
+    +recipeId: String,
+    +rating: Double,
+    +timestamp: Long
+}
+class MainActivity {
+    +onCreate
+    +BottomNavigationBar
+    +replaceFragment()
+}
+
+class HomeFragment {
+  +onCreateView()
+  +fetchRecipes()
+}
+
+class SearchFragment {
+  +onCreateView()
+  +onResume()
+}
+
+class MyRecipesFragment {
+  +onCreateView()
+  +onResume()
+}
+class ProfileFragment {
+  +onCreateView()
+  +onResume()
+}
+
+class AddRecipeActivity {
+  +onCreate()
+  +loadRecipeData()//editMode
+  +saveRecipe()
+}
+class RecipeDetailActivity {
+  +onCreate()
+  +loadRecipe()
+}
+class UserSettingsActivity{
+    +onCreate()
+    +saveUserData()
+}
+
+' Relationships
+MainActivity --> BottomNavigationBar : control
+
+' Show navigation between fragments
+BottomNavigationBar --|> HomeFragment : navigates
+BottomNavigationBar --|> SearchFragment : navigates
+BottomNavigationBar --|> MyRecipesFragment: navigates
+BottomNavigationBar --|> ProfileFragment: navigates
+BottomNavigationBar --|> AddRecipeActivity: starts
+
+HomeFragment --> RecipeRepository: uses
+SearchFragment --> RecipeRepository: uses
+MyRecipesFragment --> RecipeRepository: uses
+
+ProfileFragment --> UserRepository:uses
+AddRecipeActivity --> RecipeRepository: uses
+AddRecipeActivity --> UserRepository: uses
+
+RecipeDetailActivity --> RecipeRepository: uses
+RecipeDetailActivity --> UserRepository: uses
+RecipeDetailActivity --> NoteRepository: uses
+RecipeDetailActivity --> RatingRepository: uses
+
+UserSettingsActivity --> UserRepository: uses
+
+@enduml

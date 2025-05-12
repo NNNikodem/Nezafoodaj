@@ -6,11 +6,12 @@
     <ImageButton
         android:id="@+id/btnUserSettings"
         android:src="@drawable/settings_24dp"
-        android:backgroundTint="@color/salmon_pink"
+        android:backgroundTint="@color/button_color_over"
+        app:tint = "@color/button_color_over_text"
+        android:layout_margin="20dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="Log Out"
-        android:layout_margin="20dp"
         android:layout_gravity="end|top"/>
     <LinearLayout
         android:orientation="vertical"
@@ -85,7 +86,8 @@
     <ImageButton
         android:id="@+id/btnLogout"
         android:src="@drawable/icon_logout"
-        android:backgroundTint="@color/salmon_pink"
+        android:backgroundTint="@color/button_color_over"
+        app:tint = "@color/button_color_over_text"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="Log Out"

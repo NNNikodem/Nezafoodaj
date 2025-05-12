@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -171,7 +172,7 @@ class UserSettingsActivity : AppCompatActivity() {
     private fun uploadImageToFirebaseStorage() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val imageUri = selectedImageUri ?: return
-
+        Log.d("RECIPE_CHECKER", "imageUri: $imageUri")
         progressBar.visibility = View.VISIBLE
 
         val storageRef = FirebaseStorage.getInstance().reference

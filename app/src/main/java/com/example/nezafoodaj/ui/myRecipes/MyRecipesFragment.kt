@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nezafoodaj.R
@@ -26,6 +28,7 @@ class MyRecipesFragment : Fragment() {
     private val rr = RecipeRepository()
     private val userRepository = UserRepository()
 
+    private lateinit var tvNoRecipesResult: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var recipeAdapter: RecipeAdapter
     private lateinit var tabLayout: TabLayout
@@ -59,6 +62,7 @@ class MyRecipesFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_my_recipes, container, false)
 
+        tvNoRecipesResult = view.findViewById(R.id.tvNoRecipesResult)
         btnCreate = view.findViewById(R.id.btnCreate)
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewRecipes)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -124,6 +128,13 @@ class MyRecipesFragment : Fragment() {
         btnCreate.visibility = View.VISIBLE
         rr.getAllByUserId(userId ?: "") { recipes, success ->
             if (success && recipes != null) {
+                if(recipes.isEmpty())
+                {
+                    tvNoRecipesResult.visibility = View.VISIBLE
+                    tvNoRecipesResult.text = ContextCompat.getString(requireContext(), R.string.myRecipes_noRecipesResult)
+                    return@getAllByUserId
+                }
+                tvNoRecipesResult.visibility = View.GONE
                 displayRecipes(recipes)
             } else {
                 Toast.makeText(requireContext(), "Nepodarilo sa načítať moje recepty", Toast.LENGTH_SHORT).show()
@@ -134,14 +145,21 @@ class MyRecipesFragment : Fragment() {
     private fun loadFavoriteRecipes() {
         btnCreate.visibility = View.GONE
         userRepository.getFavoriteRecipes(userId ?: "") { favRecipeIds, success ->
-            if (!success || favRecipeIds.isNullOrEmpty()) {
+            if (!success) {
                 Toast.makeText(requireContext(), "Nepodarilo sa načítať obľúbené recepty", Toast.LENGTH_SHORT).show()
+                return@getFavoriteRecipes
+            }
+            else if (favRecipeIds.isNullOrEmpty())
+            {
+                tvNoRecipesResult.visibility = View.VISIBLE
+                tvNoRecipesResult.text = ContextCompat.getString(requireContext(), R.string.myRecipes_noFavRecipesResult)
+                displayRecipes(emptyList())
                 return@getFavoriteRecipes
             }
 
             val favoriteRecipes = mutableListOf<Recipe>()
             var loadedCount = 0
-
+            tvNoRecipesResult.visibility = View.GONE
             for (id in favRecipeIds) {
                 rr.getRecipeById(id) { recipe, success ->
                     if (success && recipe != null) {

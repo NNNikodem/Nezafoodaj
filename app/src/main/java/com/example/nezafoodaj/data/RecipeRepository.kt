@@ -5,6 +5,7 @@ import com.example.nezafoodaj.models.Recipe
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import java.text.Normalizer
 import java.util.regex.Pattern
 
@@ -19,13 +20,14 @@ class RecipeRepository {
             onComplete(false)
         }
     }
-    fun removeRecipe(recipeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun removeRecipe(userId: String, recipeId: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         // Get a reference to the document based on the recipe ID
         val recipeDocRef: DocumentReference = db.document(recipeId)
 
         recipeDocRef.delete()
             .addOnSuccessListener {
                 removeAllRatings(recipeId, onSuccess, onFailure)
+                deleteRecipeStorageData(userId, recipeId, onSuccess, onFailure)
                 onSuccess()
             }
             .addOnFailureListener { exception ->
@@ -106,24 +108,35 @@ class RecipeRepository {
                 onComplete(null, false)
             }
     }
-    fun searchRecipesByName(query: String, limit: Long = 10, onComplete: (List<Recipe>?, Boolean) -> Unit) {
+    fun searchRecipesByName(query: String, limit: Long = 100, onComplete: (List<Recipe>?, Boolean) -> Unit) {
         val normalizedQuery = normalizeText(query)
+        val queryWords = normalizedQuery.split(" ")
 
-        db.orderBy("name_search")
-            .startAt(normalizedQuery)
-            .endAt("$normalizedQuery\uf8ff")
+        db
             .limit(limit)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val recipes = querySnapshot.documents.mapNotNull { doc ->
                     doc.toObject(Recipe::class.java)
+                }.filter { recipe ->
+                    recipe.name_keywords.any { keyword ->
+                        queryWords.any { word ->
+                            if (word.length < 3) {
+                                keyword.startsWith(word)
+                            } else {
+                                keyword.contains(word)
+                            }
+                        }
+                    }
                 }
+
                 onComplete(recipes, true)
             }
             .addOnFailureListener {
                 onComplete(null, false)
             }
     }
+
     fun addRecipeToFavorites(userId: String, recipeId: String, onComplete: (Boolean) -> Unit) {
         val db = FirebaseFirestore.getInstance()
         db.collection("users")
@@ -162,5 +175,60 @@ class RecipeRepository {
     fun normalizeText(input: String): String {
         val normalized = Normalizer.normalize(input.lowercase(), Normalizer.Form.NFD)
         return Pattern.compile("\\p{InCombiningDiacriticalMarks}+").matcher(normalized).replaceAll("")
+    }
+    fun deleteRecipeStorageData(
+        userId: String,
+        recipeId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val foldersToCheck = listOf("recipe_images", "recipe_steps")
+        var pendingDeletions = foldersToCheck.size
+        var deletionFailed = false
+
+        // Function to check if all deletions have been processed
+        fun checkCompletion() {
+            pendingDeletions--
+            if (pendingDeletions == 0 && !deletionFailed) {
+                onSuccess()
+            }
+        }
+
+        for (folder in foldersToCheck) {
+            val targetPath = "$folder/$userId/$recipeId"
+            val targetRef = storageRef.child(targetPath)
+
+            targetRef.listAll()
+                .addOnSuccessListener { listResult ->
+                    val files = listResult.items
+                    if (files.isEmpty()) {
+                        checkCompletion()
+                    } else {
+                        var filesDeleted = 0
+                        for (fileRef in files) {
+                            fileRef.delete()
+                                .addOnSuccessListener {
+                                    filesDeleted++
+                                    if (filesDeleted == files.size) {
+                                        checkCompletion()
+                                    }
+                                }
+                                .addOnFailureListener { exception ->
+                                    if (!deletionFailed) {
+                                        deletionFailed = true
+                                        onFailure(exception)
+                                    }
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    if (!deletionFailed) {
+                        deletionFailed = true
+                        onFailure(exception)
+                    }
+                }
+        }
     }
 }

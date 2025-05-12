@@ -32,13 +32,15 @@
         android:background="@drawable/addrecipe_inputfield_background"
         android:layout_weight="1"
         android:hint="Ingrediencia" />
-    <Button
+    <android.widget.Button
         android:id="@+id/btnRemoveIngredient"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text="@string/remove"
-        android:backgroundTint="@color/red"
+        android:textColor="@color/white"
+        android:background="@drawable/addrecipe_button_remove"
+
         android:layout_marginStart="8dp"
         />
 </LinearLayout>

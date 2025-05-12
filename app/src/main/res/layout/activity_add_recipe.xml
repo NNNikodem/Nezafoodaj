@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/addrecipe_inputfield_background"
                 android:hint="@string/add_description_hint"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:layout_marginBottom="16dp"
                 />
             <!-- PrepTime Section -->
@@ -105,10 +106,12 @@
                 android:text="@string/add_Ingredients"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnAddIngredient"
                 android:layout_width="45dp"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:background="@drawable/addrecipe_button"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:text="@string/add" />
             <LinearLayout
@@ -128,10 +131,12 @@
                     android:textStyle="bold"
                     android:layout_marginTop="24dp"
                     />
-                <Button
+                <android.widget.Button
                     android:id="@+id/btnAddStep"
                     android:layout_width="45dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
+                    android:background="@drawable/addrecipe_button"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     android:text="@string/add"
                     android:tooltipText="@string/add_Steps_btn"
@@ -145,38 +150,57 @@
                     />
 
 
-
-            <!-- Final Image -->
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_finalImage"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:orientation="horizontal"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="4dp"/>
+                android:layout_gravity="center_vertical">
+
+                <!-- Final Image Label -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/add_finalImage"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="start"/>
+
+                <!-- Button aligned to right -->
+                <android.widget.Button
+                    android:id="@+id/btnSelectImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/add_finalImage_btn"
+                    android:background="@drawable/addrecipe_button"
+                    android:backgroundTint="@null"
+                    android:textColor="@android:color/white"
+                    android:elevation="4dp"/>
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/imageFinal"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop"
+                android:layout_gravity="center"
                 android:layout_marginBottom="8dp"
                 android:background="#CCC"
                 android:contentDescription="@string/add_finalImage_imageContentDescription"
                 />
 
-            <Button
-                android:id="@+id/btnSelectImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_finalImage_btn"/>
+
 
             <!-- Save Button -->
-            <Button
+            <android.widget.Button
                 android:id="@+id/btnSaveRecipe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/addrecipe_button"
+                android:textColor="@color/white"
                 android:text="@string/add_saveRecipe"
                 android:layout_marginTop="24dp" />
         </LinearLayout>

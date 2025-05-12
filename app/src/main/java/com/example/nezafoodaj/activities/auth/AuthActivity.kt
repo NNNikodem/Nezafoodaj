@@ -7,6 +7,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import com.example.nezafoodaj.R
 import com.example.nezafoodaj.data.UserRepository
 import com.example.nezafoodaj.databinding.ActivityAuthBinding
 import com.example.nezafoodaj.activities.main.MainActivity
@@ -27,7 +30,9 @@ class AuthActivity : AppCompatActivity() {
         }
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dark_moss_green)
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController?.isAppearanceLightStatusBars = false
         binding.btnAuth.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
@@ -58,14 +63,21 @@ class AuthActivity : AppCompatActivity() {
         updateUI()
     }
     private fun loginUser(email: String, password: String) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     userRepo.getCurrentUserData(
                         onComplete = { user, success ->
                             if (success && user != null) {
-                                saveUserDataLocally(user)
-                                goToMainActivity()
+                                if(!auth.currentUser!!.isEmailVerified){
+                                    Toast.makeText(this, "Prosíme, overte svoj účet kliknutím na odkaz v schránke: $email"
+                                        , Toast.LENGTH_SHORT).show()
+                                    auth.signOut()
+                                }
+                                else{
+                                    saveUserDataLocally(user)
+                                    goToMainActivity()
+                                }
                             } else {
                                 Toast.makeText(this, "Nepodarilo sa načítať údaje používateľa", Toast.LENGTH_SHORT).show()
                             }
@@ -81,6 +93,14 @@ class AuthActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    auth.currentUser?.sendEmailVerification()
+                        ?.addOnCompleteListener { verificationTask ->
+                            if (verificationTask.isSuccessful) {
+                                Toast.makeText(this, "Overovací e-mail bol odoslaný na $email", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(this, "Chyba pri odosielaní overovacieho e-mailu: ${verificationTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     val user = User(name, email, "", 0, "", System.currentTimeMillis(), auth.currentUser?.uid ?: "", false, emptyList())
                     userRepo.addUser(user)
                     loginUser(email, password)
@@ -164,6 +184,7 @@ class AuthActivity : AppCompatActivity() {
             putInt("userAge", user.age)
             putString("userGender", user.gender)
             putLong("userSince", user.dateCreated)
+            putString("userPhotoURL", user.profilePhotoURL)
             apply()
         }
     }

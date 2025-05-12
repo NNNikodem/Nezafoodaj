@@ -1,5 +1,6 @@
 package com.example.nezafoodaj.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nezafoodaj.R
@@ -18,6 +22,7 @@ import com.google.android.material.chip.ChipGroup
 
 class HomeFragment : Fragment() {
 
+
     private lateinit var rvLatestRecipes: RecyclerView
     private lateinit var rvTopRatedRecipes: RecyclerView
     private lateinit var latestRecipeAdapter: RecipeAdapterHome
@@ -25,9 +30,18 @@ class HomeFragment : Fragment() {
     private lateinit var chipGroupTimeFilter: ChipGroup
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var tvNoRecipes: TextView
+    private lateinit var tvLatestRecipes: TextView
+    private lateinit var tvTopRatedRecipes: TextView
 
     private val recipeRepository = RecipeRepository()
     private var allRecipes: List<Recipe> = listOf()
+    private var recipeDetailLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            fetchRecipes()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +53,9 @@ class HomeFragment : Fragment() {
         rvTopRatedRecipes = view.findViewById(R.id.rvTopRatedRecipes)
         chipGroupTimeFilter = view.findViewById(R.id.chipGroupTimeFilter)
         progressBar = view.findViewById(R.id.progressBar)
-
+        tvNoRecipes = view.findViewById(R.id.tvHomeNoRecipes)
+        tvLatestRecipes = view.findViewById(R.id.textView_latest)
+        tvTopRatedRecipes = view.findViewById(R.id.textView_best)
         chipGroupTimeFilter.setOnCheckedStateChangeListener { group, checkedIds ->
             updateTopRatedRecipes()
         }
@@ -52,14 +68,14 @@ class HomeFragment : Fragment() {
             // handle click for the latest recipe
             val intent = Intent(requireContext(), RecipeDetailActivity::class.java)
             intent.putExtra("recipeId", recipeId)
-            startActivity(intent)
+            recipeDetailLauncher.launch(intent)
         }
 
         topRatedRecipeAdapter = RecipeAdapterHome(mutableListOf()) { recipeId ->
             // handle click for top-rated recipe
             val intent = Intent(requireContext(), RecipeDetailActivity::class.java)
             intent.putExtra("recipeId", recipeId)
-            startActivity(intent)
+            recipeDetailLauncher.launch(intent)
         }
 
         rvLatestRecipes.adapter = latestRecipeAdapter
@@ -76,9 +92,17 @@ class HomeFragment : Fragment() {
         // Fetch the recipes once and store them in memory
         recipeRepository.getAll { recipes, success ->
             progressBar.visibility = View.GONE
-            if (success && recipes != null) {
+            if (success && !recipes.isNullOrEmpty()) {
                 allRecipes = recipes // Store the fetched recipes
                 loadRecipes() // Call loadRecipes to update the UI
+            }
+            else{
+                tvNoRecipes.visibility = View.VISIBLE
+                tvLatestRecipes.visibility = View.GONE
+                tvTopRatedRecipes.visibility = View.GONE
+                chipGroupTimeFilter.visibility = View.GONE
+                rvLatestRecipes.visibility = View.GONE
+                rvTopRatedRecipes.visibility = View.GONE
             }
         }
     }

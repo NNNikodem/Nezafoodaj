@@ -11,11 +11,12 @@
     android:padding="12dp"
     >
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btnRemoveStep"
         android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/red"
+        android:layout_height="45dp"
+        android:background="@drawable/addrecipe_button_remove"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:text="@string/remove"
         android:layout_gravity="end"/>
@@ -30,11 +31,12 @@
 
     <ImageView
         android:id="@+id/imageStepPreview"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:visibility="gone"
+        android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/add_step_imageContentDescription" />
 
@@ -45,10 +47,12 @@
         android:gravity="center_vertical"
         android:layout_marginTop="4dp">
 
-        <Button
+        <android.widget.Button
             android:id="@+id/btnSelectStepImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/addrecipe_button"
+            android:textColor="@color/white"
             android:text="@string/add_step_imageBtn" />
 
         <ImageView

@@ -101,14 +101,14 @@
             </RadioGroup>
 
             <!-- Save Button -->
-            <Button
+            <android.widget.Button
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Uložiť zmeny"
                 android:layout_marginTop="32dp"
-                android:backgroundTint="@color/dark_moss_green"
-                android:textColor="@android:color/white" />
+                android:background="@drawable/addrecipe_button"
+                android:textColor="@color/white" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

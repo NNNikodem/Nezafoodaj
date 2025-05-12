@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/button_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed state -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#8B0000"
+            android:endColor="#B22222"
+            android:angle="90" />
+            <corners android:radius="12dp" />
+            <stroke android:width="2dp" android:color="#660000" />  <!-- Dark red stroke -->
+        </shape>
+    </item>
+
+    <!-- Default state -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#C32F2F"
+                android:endColor="#871C1C"
+                android:angle="90" />
+                <corners android:radius="12dp" />
+                <stroke android:width="2dp" android:color="#8B0000" />  <!-- Dark red stroke -->
+                <padding android:bottom="8dp" android:left="8dp"
+                android:right="8dp" android:top="8dp" />
+        </shape>
+    </item>
+</selector>

@@ -23,6 +23,8 @@
     <color name="header_color">@color/dark_moss_green</color>
     <color name="text_color">#FF000000</color>
     <color name="button_color">@color/dark_moss_green</color>
+    <color name="button_color_over">@color/dark_moss_green</color>
+    <color name="button_color_over_text">@color/straw</color>
     <color name="input_background">#F0F0F0</color>
     <color name="input_border">#DDDDDD</color>
 

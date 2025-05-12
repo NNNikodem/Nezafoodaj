@@ -10,6 +10,7 @@ data class Recipe(
     val userId: String = "",
     val name: String = "",
     val name_search: String = "",
+    val name_keywords: List<String> = emptyList(),
     val description: String = "",
     val ingredients: List<Ingredient> = listOf(),
     val steps: List<Step> = listOf(),

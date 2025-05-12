@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.nezafoodaj.R
@@ -96,8 +97,9 @@ class RecipeDetailActivity : AppCompatActivity() {
                 .setTitle("Potvrdenie vymazania")
                 .setMessage("Naozaj chceš vymazať tento recept?")
                 .setPositiveButton("Áno") { _, _ ->
-                    recipeRepository.removeRecipe(recipeId, {
+                    recipeRepository.removeRecipe(recipe.userId, recipeId, {
                         Toast.makeText(this, "Recept bol úspešne odstránený", Toast.LENGTH_SHORT).show()
+                        setResult(Activity.RESULT_OK)
                         finish()
                     }) { exception ->
                         Toast.makeText(this, "Chyba pri mazaní: ${exception.message}", Toast.LENGTH_SHORT).show()
@@ -225,6 +227,9 @@ class RecipeDetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.dark_moss_green)
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController?.isAppearanceLightStatusBars = false
         toolbar.navigationIcon?.setTint(ContextCompat.getColor(this, R.color.white))
         supportActionBar?.title = recipe.name
         toolbar.setNavigationOnClickListener { finish() }
@@ -285,7 +290,10 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         // Load final image if available
         if (recipe.finalImage.isNotEmpty()) {
-            Glide.with(this).load(recipe.finalImage).into(imageViewFinal)
+            Glide
+                .with(this)
+                .load(recipe.finalImage)
+                .into(imageViewFinal)
         }
 
         textViewDate.text = recipe.formatTimestamp(recipe.dateCreated)
